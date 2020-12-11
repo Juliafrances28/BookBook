@@ -4,7 +4,7 @@ const orm = require("../config/orm.js");
 const router = express.Router();
 
 // Import the model (cat.js) to use its database functions.
-const bookbook = require("../model/books.js");
+const bookbook = require("../models/books.js");
 
 router.get("/", function (req, res) {
     res.sendFile(path.join(__dirname, "public/index.html"));

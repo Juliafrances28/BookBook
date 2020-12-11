@@ -5,4 +5,4 @@ const books = {
     //Will fill in based on group discussion 
 }
 // Export the database functions for the controller (catsController.js).
-module.exports = burger;
+module.exports = books;

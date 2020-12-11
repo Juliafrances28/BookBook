@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Import routes and give the server access to them.
-var routes = require("./controllers/burgers_controller.js");
+var routes = require("./controllers/books_controller.js");
 
 app.use(routes);
 
