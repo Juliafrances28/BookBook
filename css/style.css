@@ -1,0 +1,69 @@
+/* Import UIkit default theme (or uikit.less with only core styles) */
+@import "node_modules/uikit/src/less/uikit.theme.less";
+
+/* Universal styling */
+*
+{
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+
+
+/* Applies to the whole page */
+html
+{
+    /* Green background Rich ! from Zo =) */
+    background-color: rgb(42, 143, 59);
+    color:white;
+}
+
+h2
+{
+ color:white;
+}
+
+/* Book Book slogin */
+#book-slogin
+{
+    color: white;
+}
+
+/* Client-input */
+#client-input
+{
+    text-align: center;
+}
+
+/* Creat account section */
+#accountCreate
+{
+    text-align:center;
+    color: white;
+    text-decoration: underline;
+}
+
+/* unvisited link */
+a:link {
+    color: red;
+  }
+  
+/* reading gif */
+#reading-gif
+{
+    width:80px;
+    height:80px;
+    border:solid 2px;
+    border-radius: solid 2px;
+}
+
+#video-book
+{
+    text-align: center;
+    
+}
+
+footer
+{
+    text-align: center;
+}
+
