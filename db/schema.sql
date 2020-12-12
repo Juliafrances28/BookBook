@@ -31,8 +31,8 @@ CREATE TABLE users (
     Primary Key (id)    
 );
 
-DROP TABLE IF EXISTS Owners;
-CREATE TABLE Owners (
+DROP TABLE IF EXISTS owners;
+CREATE TABLE owners (
     id INT Auto_Increment,
     bookId INT NOT NULL,
     userId INT NOT NULL,
