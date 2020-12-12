@@ -30,8 +30,8 @@ CREATE TABLE users (
     Primary Key (id)    
 );
 
-DROP TABLE IF EXISTS Owners;
-CREATE TABLE Owners (
+DROP TABLE IF EXISTS owners;
+CREATE TABLE owners (
     id INT Auto_Increment,
     bookId INT NOT NULL,
     userId INT NOT NULL,
@@ -40,8 +40,8 @@ CREATE TABLE Owners (
     Primary Key (id)
 );
 
-DROP TABLE IF EXISTS WishList;
-CREATE TABLE WishList (
+DROP TABLE IF EXISTS wishList;
+CREATE TABLE wishList (
     id INT Auto_Increment,
     bookId INT NOT NULL,
     userId INT NOT NULL,
