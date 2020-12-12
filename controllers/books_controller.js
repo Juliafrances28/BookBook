@@ -98,18 +98,18 @@ router.put("/api/borrow/:bookId", function (req, res) {
 
     books.updateOne({
         available: false
-    }, condition, function(result){
+    }, condition, function (result) {
         if (result.changedRows == 0) {
             return res.status(404).end();
         } else {
             changeSecondOne();
         }
     });
-    
-    function changeSecondOne(){
+
+    function changeSecondOne() {
         books.updateOne({
             checkedOut: true
-        }, condition, function(result){
+        }, condition, function (result) {
             if (result.changedRows == 0) {
                 return res.status(404).end();
             } else {
@@ -129,18 +129,18 @@ router.put("/api/:bookId/return", function (req, res) {
 
     books.updateOne({
         available: true
-    }, condition, function(result){
+    }, condition, function (result) {
         if (result.changedRows == 0) {
             return res.status(404).end();
         } else {
             changeSecondOne();
         }
     });
-    
-    function changeSecondOne(){
+
+    function changeSecondOne() {
         books.updateOne({
             checkedOut: false
-        }, condition, function(result){
+        }, condition, function (result) {
             if (result.changedRows == 0) {
                 return res.status(404).end();
             } else {
@@ -156,19 +156,18 @@ router.put("/api/:bookId/return", function (req, res) {
 router.delete("/api/:bookId/delete", function (req, res) {
     let condition = "id = " + req.params.bookId;
 
-    books.deleteOne(condition, function(result) {
-      if (result.affectedRows == 0) {
-        // If no rows were changed, then the ID must not exist, so 404
-        return res.status(404).end();
-      } else {
-        res.status(200).end();
-      }
+    books.deleteOne(condition, function (result) {
+        if (result.affectedRows == 0) {
+            // If no rows were changed, then the ID must not exist, so 404
+            return res.status(404).end();
+        } else {
+            res.status(200).end();
+        }
     });
 });
 
 
 
 
-const gbooksAPIkey = "AIzaSyBbP25k0xQFGGCWKgeCDngvaUC3_ufLXNs";
 // Export routes for server.js to use.
 module.exports = router;
