@@ -26,29 +26,33 @@ CREATE TABLE users (
     id INT Auto_Increment,
     name varchar(50),
     email varchar(50),
-    secret CHAR(60) BINARY,    
+    secret CHAR(60) BINARY,
+    CONSTRAINT UC_users_email UNIQUE (id, email),  
     Primary Key (id)    
 );
 
-DROP TABLE IF EXISTS owners;
-CREATE TABLE owners (
+DROP TABLE IF EXISTS Owners;
+CREATE TABLE Owners (
     id INT Auto_Increment,
     bookId INT NOT NULL,
     userId INT NOT NULL,
-   CONSTRAINT FK_Owners_BookId FOREIGN KEY (bookId) REFERENCES books(id),
-    CONSTRAINT FK_Owners_UserId FOREIGN KEY (userId) REFERENCES users(id),
+	CONSTRAINT FK_Owners_BookId FOREIGN KEY (bookId) REFERENCES books(id) ON DELETE CASCADE,
+    CONSTRAINT FK_Owners_UserId FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,    
     Primary Key (id)
 );
 
-DROP TABLE IF EXISTS wishList;
-CREATE TABLE wishList (
+DROP TABLE IF EXISTS wishlist;
+CREATE TABLE wishlist (
     id INT Auto_Increment,
-    bookId INT NOT NULL,
     userId INT NOT NULL,
-    CONSTRAINT FK_WishList_BookId FOREIGN KEY (bookId) REFERENCES books(id),
-    CONSTRAINT FK_WishList_UserId FOREIGN KEY (userId) REFERENCES users(id),
+	title varchar(50),
+    author varchar(50),
+    genre varchar(50),
+    gbookId varchar(50),
+    CONSTRAINT FK_WishList_UserId FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
     Primary Key (id)
 );
+
 
 
 
