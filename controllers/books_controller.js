@@ -43,7 +43,20 @@ router.get("/api/bookUser", function (req, res) {
 
 });
 
+router.post("/api/bookUser/check", async function (req, res) {
+    const user = users.find(user => user.email = req.body.email)
+    try {
+        if (await bcrypt.compare(req.body.password, user.password)) {
+            res.send("Congratulations")
+        } else {
+            res.send("Not the same Password")
+        }
 
+    } catch {
+        console.log("did not work")
+    }
+
+});
 
 //Server side API calls go here
 
