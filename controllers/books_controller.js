@@ -1,6 +1,6 @@
 const express = require("express");
 const orm = require("../config/orm.js");
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 
 const router = express.Router();
 
