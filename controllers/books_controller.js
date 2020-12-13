@@ -182,18 +182,17 @@ router.delete("/api/:bookId/delete", function (req, res) {
 //When the user gives a search entry, we return the JSON from google books - get request
 router.get("/gbooks/:book", function (req, res) {
     //API_KEY will give the API key just to the server, but not to the client
-    api_key = process.env.API_KEY;
     let bookSearch = req.params.book;
     let apiURL = "https://www.googleapis.com/books/v1/volumes?q=";
     apiURL += bookSearch;
     apiURL += "&printType=books&key="
-    apiURL += api_key;
+    apiURL += API_KEY;
 
-    fetch(apiURL).then(
-        data => { return data.json() }
-    ).then(
-        res => { console.log(res) }
-    );
+    fetch(apiURL).then(function(result){
+        return result.json();
+    }).then(function(response){
+        res.json(response);
+    });
 
 });
 
