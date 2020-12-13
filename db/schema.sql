@@ -21,6 +21,7 @@ Create Table books (
     Primary Key (id)  
 );
 
+
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
     id INT Auto_Increment,

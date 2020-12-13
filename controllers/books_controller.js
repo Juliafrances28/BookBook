@@ -1,5 +1,7 @@
 const express = require("express");
 const orm = require("../config/orm.js");
+
+const books = require("../models/books.js");
 // const bcrypt = require('bcrypt');
 
 const router = express.Router();
@@ -12,6 +14,8 @@ const bookbook = require("../models/books.js");
 router.get("/", function (req, res) {
     res.sendFile(path.join(__dirname, "public/index.html"));
 });
+
+
 //ascynhronous library bcrypt needed.  Need async, await, try and catch
 router.post("/api/bookUser", async function (req, res) {
     try {
@@ -27,7 +31,7 @@ router.post("/api/bookUser", async function (req, res) {
         };
         users.push(user)
 
-    } catch{
+    } catch {
         console.log(err)
 
     }
@@ -38,10 +42,6 @@ router.post("/api/bookUser", async function (req, res) {
 
 });
 
-router.get("/api/bookUser", function (req, res) {
-    res.json(users)
-
-});
 
 router.post("/api/bookUser/check", async function (req, res) {
     const user = users.find(user => user.email = req.body.email)
@@ -59,6 +59,116 @@ router.post("/api/bookUser/check", async function (req, res) {
 });
 
 //Server side API calls go here
+router.get("/allbooks", function (req, res) {
+    books.selectAll(function (data) {
+        res.json({ books: data });
+    });
+});
+
+//Presents all of the users - maybe this should be more secure?
+router.get("/api/bookUser", function (req, res) {
+    books.allUsers(function (data) {
+        res.json({ books: data });
+    });
+
+});
+
+//Looks for books based on genre and user input
+router.get("/api/books/:genre", function (req, res) {
+    let genre = req.params.genre;
+
+    books.selectWhere("genre", genre, function (data) {
+        res.json(data);
+    })
+});
+
+
+router.get("/api/bookById/:id", function (req, res) {
+    let id = req.params.id;
+    books.selectWhere("id", id, function (data) {
+        res.json(data);
+    })
+});
+
+//User can mark a book as borrowed
+router.put("/api/borrow/:bookId", function (req, res) {
+    //change availability from true to false
+    //change checkedout from false to true
+
+    let condition = "id = " + req.params.bookId;
+
+    books.updateOne({
+        available: false
+    }, condition, function(result){
+        if (result.changedRows == 0) {
+            return res.status(404).end();
+        } else {
+            changeSecondOne();
+        }
+    });
+    
+    function changeSecondOne(){
+        books.updateOne({
+            checkedOut: true
+        }, condition, function(result){
+            if (result.changedRows == 0) {
+                return res.status(404).end();
+            } else {
+                changeSecondOne();
+                res.json({ id: req.params.id });
+            }
+        });
+    }
+});
+
+
+router.put("/api/:bookId/return", function (req, res) {
+    //change availability from false to true
+    //change checkedout from true to false
+
+    let condition = "id = " + req.params.bookId;
+
+    books.updateOne({
+        available: true
+    }, condition, function(result){
+        if (result.changedRows == 0) {
+            return res.status(404).end();
+        } else {
+            changeSecondOne();
+        }
+    });
+    
+    function changeSecondOne(){
+        books.updateOne({
+            checkedOut: false
+        }, condition, function(result){
+            if (result.changedRows == 0) {
+                return res.status(404).end();
+            } else {
+                changeSecondOne();
+                res.json({ id: req.params.id });
+            }
+        });
+    }
+
+});
+
+//User can delete a book from their library
+router.delete("/api/:bookId/delete", function (req, res) {
+    let condition = "id = " + req.params.bookId;
+
+    books.deleteOne(condition, function(result) {
+      if (result.affectedRows == 0) {
+        // If no rows were changed, then the ID must not exist, so 404
+        return res.status(404).end();
+      } else {
+        res.status(200).end();
+      }
+    });
+});
+
+
+
 
 const gbooksAPIkey = "AIzaSyBbP25k0xQFGGCWKgeCDngvaUC3_ufLXNs";
 // Export routes for server.js to use.
