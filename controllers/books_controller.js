@@ -6,7 +6,16 @@ const books = require("../models/books.js");
 
 const router = express.Router();
 
-const users = []
+//This is required to do the google books backend stuff
+const fetch = require("node-fetch");
+const dotenv = require('dotenv');
+dotenv.config();
+
+const users = [];
+
+require("dotenv").config();
+
+const API_KEY = process.env.API_KEY;
 
 // Import the model (cat.js) to use its database functions.
 const bookbook = require("../models/books.js");
@@ -99,18 +108,18 @@ router.put("/api/borrow/:bookId", function (req, res) {
 
     books.updateOne({
         available: false
-    }, condition, function(result){
+    }, condition, function (result) {
         if (result.changedRows == 0) {
             return res.status(404).end();
         } else {
             changeSecondOne();
         }
     });
-    
-    function changeSecondOne(){
+
+    function changeSecondOne() {
         books.updateOne({
             checkedOut: true
-        }, condition, function(result){
+        }, condition, function (result) {
             if (result.changedRows == 0) {
                 return res.status(404).end();
             } else {
@@ -130,18 +139,18 @@ router.put("/api/:bookId/return", function (req, res) {
 
     books.updateOne({
         available: true
-    }, condition, function(result){
+    }, condition, function (result) {
         if (result.changedRows == 0) {
             return res.status(404).end();
         } else {
             changeSecondOne();
         }
     });
-    
-    function changeSecondOne(){
+
+    function changeSecondOne() {
         books.updateOne({
             checkedOut: false
-        }, condition, function(result){
+        }, condition, function (result) {
             if (result.changedRows == 0) {
                 return res.status(404).end();
             } else {
@@ -157,19 +166,37 @@ router.put("/api/:bookId/return", function (req, res) {
 router.delete("/api/:bookId/delete", function (req, res) {
     let condition = "id = " + req.params.bookId;
 
-    books.deleteOne(condition, function(result) {
-      if (result.affectedRows == 0) {
-        // If no rows were changed, then the ID must not exist, so 404
-        return res.status(404).end();
-      } else {
-        res.status(200).end();
-      }
+    books.deleteOne(condition, function (result) {
+        if (result.affectedRows == 0) {
+            // If no rows were changed, then the ID must not exist, so 404
+            return res.status(404).end();
+        } else {
+            res.status(200).end();
+        }
     });
 });
 
 
+//Google Books
+
+//When the user gives a search entry, we return the JSON from google books - get request
+router.get("/gbooks/:book", function (req, res) {
+    //API_KEY will give the API key just to the server, but not to the client
+    api_key = process.env.API_KEY;
+    let bookSearch = req.params.book;
+    let apiURL = "https://www.googleapis.com/books/v1/volumes?q=";
+    apiURL += bookSearch;
+    apiURL += "&printType=books&key="
+    apiURL += api_key;
+
+    fetch(apiURL).then(
+        data => { return data.json() }
+    ).then(
+        res => { console.log(res) }
+    );
+
+});
 
 
-const gbooksAPIkey = "AIzaSyBbP25k0xQFGGCWKgeCDngvaUC3_ufLXNs";
 // Export routes for server.js to use.
 module.exports = router;

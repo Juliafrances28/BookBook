@@ -6,6 +6,10 @@ var PORT = process.env.PORT || 3000;
 
 var app = express();
 
+const dotenv = require('dotenv');
+dotenv.config();
+
+
 
 // Use the express.static middleware to serve static content for the app from the "public" directory in the application directory.
 app.use(express.static("public"));
@@ -18,6 +22,9 @@ app.use(express.json());
 var routes = require("./controllers/books_controller.js");
 
 app.use(routes);
+
+// Here we introduce HTML routing to serve different HTML files
+require("./routes/html-routes.js")(app);
 
 
 // Start our server so that it can begin listening to client requests.
