@@ -6,6 +6,13 @@ var PORT = process.env.PORT || 3000;
 
 var app = express();
 
+//These are needed for the environmental variables needed for the books API
+//const dotenv = require('dotenv');
+//dotenv.config();
+require('dotenv').config();
+
+const API_KEY = process.env.API_KEY;
+
 
 // Use the express.static middleware to serve static content for the app from the "public" directory in the application directory.
 app.use(express.static("public"));
