@@ -6,7 +6,7 @@
     <!-- UIkit CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.5.16/dist/css/uikit.min.css" />
     <!-- Zo's style sheet -->
-    <link rel = "stylesheet" href = "./public/css/style.css">
+    <link rel = "stylesheet" href = "./public/css/login.css">
     <!-- Zo's Book Book favicon -->
     <link rel="icon" href="./public/css/assets/images/favicon.png" type="image/gif" sizes="32x32">
     <title>Book Book | Team 4 </title>
@@ -15,27 +15,33 @@
     <!-- Utilizing UI-kit container dynamic sizing -->
     <div class = "uk-container-expand">
 
-        
+        <!-- UI Kit animation Zo -->
         <h2 class = "uk-align-right uk-padding uk-animation-shake">
             Book Book <img id = "reading-gif" src = "./public/css/assets/images/reading -slogan-gif.gif" alt = "book-gif"></h2> <br><br>
         
             <!-- Book Book slogin -->
         <p id = "book-slogin" class = "uk-padding uk-animation-fade">Reading one book, at a time.</p>
 
-
+                    <!-- Email section -->
                     <form id = "client-input">
                         <div class="uk-margin">
                             <div class="uk-inline uk-width-auto">
-                                <span class="uk-form-icon" uk-icon="icon: user"></span>
+                               
                                 <input class="uk-input" type="text" placeholder="Email">
                             </div>
                         </div>
-                        <div class="uk-margin">
+
+                        <!-- Password section -->
+                        <div class="uk-margin"></div>
                             <div class="uk-inline uk-width-auto">
-                                <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: lock"></span>
-                                <input class="uk-input uk-text-right" type="text" placeholder="Password">
+                                <!-- Icon -->
+                               
+                                <!--Password section updated for privacy section Zo-->
+                                <input class="uk-input uk-text-right" type="password" value="" id="myInput" placeholder="Password" required> <br> <br>
+                                <input type="checkbox" onclick="myFunction()">Show Password <br>
+                                <input type="checkbox">Remember Password?
                             </div>
-                        </p>
+
                     </form>
                 </div>
             </div>
@@ -55,15 +61,15 @@
 
         <!-- Book Book audio ;) -->
         <audio autoplay loop>
-            <source src="./css/assets/bgm/BookBook_ost.mp3" type="audio/mpeg">
+            <source src="./public/css/assets/bgm/BookBook_ost.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
             </audio>
         </div>
         
         <br>
 
-         <!-- Footer section -->
-            <footer id = "footer">&#169; 2020 Team Four, Project Two</footer>
+         <!-- Footer section updated-->
+            <footer id = "footer">&#169; 2020 Team Four 😎, Project Two</footer>
         <br>
     </div>
 
@@ -73,6 +79,6 @@
 <!-- UIkit Icon library JS -->
 <script src="uikit/dist/js/uikit-icons.min.js"></script>
 <!-- Zo's script file -->
-<script src = "main.js"></script>
+<script src = "./public/script/login.js"></script>
 </body>
 </html>
