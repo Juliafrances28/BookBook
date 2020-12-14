@@ -1,8 +1,13 @@
 const express = require("express");
+
+const bcrypt = require('bcrypt');
+const isUser = require("../config/middleware/isUser")
+
 const orm = require("../config/orm.js");
 
 const books = require("../models/books.js");
 // const bcrypt = require('bcrypt');
+
 
 const router = express.Router();
 
@@ -24,6 +29,10 @@ router.get("/", function (req, res) {
     res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
+//serve up home page if the user logs in
+router.get("/home", isUser ,function (req, res) {
+    res.sendFile(path.join(__dirname, "public/index.html"));
+});
 
 //ascynhronous library bcrypt needed.  Need async, await, try and catch
 router.post("/api/bookUser", async function (req, res) {
