@@ -16,7 +16,7 @@ module.exports = function (app) {
  
     // index route loads view.html
     app.get("/home", function (req, res) {
-        res.sendFile(path.join(__dirname, "../public/html/home.html"));
+        res.sendFile(path.join(__dirname, "../public/html/homepage.html"));
     });
  
     // add route loads the add.html page,

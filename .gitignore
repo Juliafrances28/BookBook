@@ -104,4 +104,4 @@ dist
 .tern-port
 
 #To protect the API key
-app-env
+.env
