@@ -26,7 +26,7 @@ var routes = require("./controllers/books_controller.js");
 
 app.use(routes);
 
-
+require("./routes/html-routes.js")(app);
 // Start our server so that it can begin listening to client requests.
 
 app.listen(PORT, function () {

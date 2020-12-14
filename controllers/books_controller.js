@@ -94,10 +94,11 @@ router.get("/api/books/:genre", function (req, res) {
 
 router.get("/api/bookById/:id", function (req, res) {
     let id = req.params.id;
-    books.selectWhere("id", id, function (data) {
+    books.selectWhere("gbookId", id, function (data) {
         res.json(data);
     })
 });
+
 
 //User can mark a book as borrowed
 router.put("/api/borrow/:bookId", function (req, res) {

@@ -16,15 +16,16 @@ module.exports = function (app) {
  
     // index route loads view.html
     app.get("/home", function (req, res) {
-        res.sendFile(path.join(__dirname, "../public/home.html"));
+        res.sendFile(path.join(__dirname, "../public/html/homepage.html"));
     });
  
     // add route loads the add.html page,
     // where users can enter new characters to the db
     app.get("/index", function (req, res) {
-        res.sendFile(path.join(__dirname, "../public/index.html"));
+        res.sendFile(path.join(__dirname, "../public/html/index.html"));
     });
  
  
  
 };
+ 
