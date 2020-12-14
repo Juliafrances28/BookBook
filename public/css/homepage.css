@@ -1,0 +1,51 @@
+/* Import UIkit default theme (or uikit.less with only core styles) */
+@import "node_modules/uikit/src/less/uikit.theme.less";
+
+/* Homepage CSS Zo*/
+
+html
+{
+    background-color: rgb(42, 143, 59);
+    color: white;
+    padding:10px;
+}
+
+h2
+
+{
+    color:white;
+}
+
+footer
+{
+    color: white;
+    text-align:center;
+}
+
+img
+{
+    width:100%;
+
+}
+
+a:hover
+{
+    border:white solid white;
+}
+
+button
+{
+    padding: 20px;
+    width: 100px;
+    border-radius: 10px;
+}
+
+#four-ball
+{
+ width:30px;
+}
+
+placeholder 
+{
+    color:white;
+}

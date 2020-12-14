@@ -39,7 +39,17 @@ function objToSql(ob) {
 const orm = {
     //selectAll()
     selectAll: function (tableInput, cb) {
-        var queryString = "SELECT * FROM " + tableInput + ";";
+        let queryString = "SELECT * FROM " + tableInput + ";";
+        connection.query(queryString, function (err, result) {
+            if (err) {
+                throw err;
+            }
+            cb(result);
+        });
+    },
+    //selectWhere
+    selectWhere: function (tableInput, col, vals, cb) {
+        let queryString = `SELECT * FROM ${tableInput} WHERE ${col} ="${vals}";`;
         connection.query(queryString, function (err, result) {
             if (err) {
                 throw err;
@@ -49,7 +59,7 @@ const orm = {
     },
     //insertOne()
     insertOne: function (table, cols, vals, cb) {
-        var queryString = "INSERT INTO " + table;
+        let queryString = "INSERT INTO " + table;
 
         queryString += " (";
         queryString += cols.toString();
@@ -67,9 +77,8 @@ const orm = {
             cb(result);
         });
     },
-    //updateOne()
     updateOne: function (table, objColVals, condition, cb) {
-        var queryString = "UPDATE " + table;
+        let queryString = "UPDATE " + table;
 
         queryString += " SET ";
         queryString += objToSql(objColVals);
@@ -87,7 +96,7 @@ const orm = {
     },
     //deleteOne()
     deleteOne: function (table, condition, cb) {
-        var queryString = "DELETE FROM " + table;
+        let queryString = "DELETE FROM " + table;
         queryString += " WHERE ";
         queryString += condition;
 
