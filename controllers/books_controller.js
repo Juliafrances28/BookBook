@@ -1,5 +1,5 @@
 const express = require("express");
-
+const path = require('path');
 const bcrypt = require('bcrypt');
 const isUser = require("../config/middleware/isUser")
 
@@ -18,7 +18,7 @@ const fetch = require("node-fetch");
 const dotenv = require('dotenv');
 //require("dotenv").config();
 dotenv.config();
- 
+
 const API_KEY = process.env.API_KEY;
 
 
@@ -30,12 +30,12 @@ router.get("/", function (req, res) {
 });
 
 //serve up home page if the user logs in
-router.get("/home", isUser ,function (req, res) {
-    res.sendFile(path.join(__dirname, "public/index.html"));
-});
+// router.get("/home", isUser, function (req, res) {
+//     res.sendFile(path.join(__dirname, "public/index.html"));
+// });
 
 //ascynhronous library bcrypt needed.  Need async, await, try and catch
-router.post("/api/bookUser", async function (req, res) {
+router.post("/register", async function (req, res) {
     try {
         //part of the 2 arguments needed to create hashed password ** I can use a number only if needed and delete the salt variable.  Default is 10
         const salt = await bcrypt.genSalt();
@@ -43,22 +43,24 @@ router.post("/api/bookUser", async function (req, res) {
         const scrambled = await bcrypt.hash(req.body.password, salt)
         console.log(scrambled)
         //sending up to array.  ***Need to figure out how to send to database**
-        let user = {
-            email: req.body.email,
-            password: scrambled
-        };
-        users.push(user)
+
 
     } catch {
         console.log(err)
 
     }
-    console.log(req.body)
-    res.status(200).send("thanks");
-    console.log(users)
-    console.log(users.length)
+    books.createUser(["name", "email", "secret"], [req.body.name, req.body.email, scrambled], function (result) {
+        console.log(result, "line57 controller. ")
+    })
 
-});
+    res.status(200).send("thanks");
+
+
+})
+
+
+
+
 
 
 router.post("/api/bookUser/check", async function (req, res) {
@@ -118,18 +120,18 @@ router.put("/api/borrow/:bookId", function (req, res) {
 
     books.updateOne({
         available: false
-    }, condition, function(result){
+    }, condition, function (result) {
         if (result.changedRows == 0) {
             return res.status(404).end();
         } else {
             changeSecondOne();
         }
     });
-    
-    function changeSecondOne(){
+
+    function changeSecondOne() {
         books.updateOne({
             checkedOut: true
-        }, condition, function(result){
+        }, condition, function (result) {
             if (result.changedRows == 0) {
                 return res.status(404).end();
             } else {
@@ -149,18 +151,18 @@ router.put("/api/:bookId/return", function (req, res) {
 
     books.updateOne({
         available: true
-    }, condition, function(result){
+    }, condition, function (result) {
         if (result.changedRows == 0) {
             return res.status(404).end();
         } else {
             changeSecondOne();
         }
     });
-    
-    function changeSecondOne(){
+
+    function changeSecondOne() {
         books.updateOne({
             checkedOut: false
-        }, condition, function(result){
+        }, condition, function (result) {
             if (result.changedRows == 0) {
                 return res.status(404).end();
             } else {
@@ -176,18 +178,18 @@ router.put("/api/:bookId/return", function (req, res) {
 router.delete("/api/:bookId/delete", function (req, res) {
     let condition = "id = " + req.params.bookId;
 
-    books.deleteOne(condition, function(result) {
-      if (result.affectedRows == 0) {
-        // If no rows were changed, then the ID must not exist, so 404
-        return res.status(404).end();
-      } else {
-        res.status(200).end();
-      }
+    books.deleteOne(condition, function (result) {
+        if (result.affectedRows == 0) {
+            // If no rows were changed, then the ID must not exist, so 404
+            return res.status(404).end();
+        } else {
+            res.status(200).end();
+        }
     });
 });
 
 //Google Books
- 
+
 //When the user gives a search entry, we return the JSON from google books - get request
 router.get("/gbooks/:book", function (req, res) {
     //API_KEY will give the API key just to the server, but not to the client
@@ -196,13 +198,13 @@ router.get("/gbooks/:book", function (req, res) {
     apiURL += bookSearch;
     apiURL += "&printType=books&key="
     apiURL += API_KEY;
- 
-    fetch(apiURL).then(function(result){
+
+    fetch(apiURL).then(function (result) {
         return result.json();
-    }).then(function(response){
+    }).then(function (response) {
         res.json(response);
     });
- 
+
 });
 
 

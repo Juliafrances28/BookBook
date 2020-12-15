@@ -13,8 +13,8 @@ const books = {
             cb(res);
         })
     },
-    selectWhere: function(col, vals, cb){
-        orm.selectWhere("books", col, vals, function(res){
+    selectWhere: function (col, vals, cb) {
+        orm.selectWhere("books", col, vals, function (res) {
             cb(res);
         })
     },
@@ -32,6 +32,12 @@ const books = {
         orm.deleteOne("books", condition, function (res) {
             cb(res);
         })
+    },
+    //Needed to create this function to add user to the users table of the database
+    createUser: function (cols, vals, cb) {
+        orm.create("users", cols, vals, function (res) {
+            cb(res);
+        });
     }
 }
 // Export the database functions for the controller (catsController.js).
