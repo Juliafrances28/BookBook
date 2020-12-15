@@ -107,6 +107,22 @@ const orm = {
 
             cb(result);
         });
+    },
+    //Needed to create this function to add user to the users table of the database
+    createUser: function (table, cols, vals, cb) {
+        let queryString = "INSERT INTO " + table;
+        queryString += " (";
+        queryString += cols.toString();
+        queryString += ") ";
+        queryString += "VALUES (?,?,?);";
+
+        connection.query(queryString, vals, function (e, result) {
+            if (e) {
+                throw e;
+            }
+            cb(result)
+        })
+
     }
 }
 // Export the orm object for the model (cat.js).
