@@ -49,8 +49,9 @@ const orm = {
     },
     //selectWhere
     selectWhere: function (tableInput, col, vals, cb) {
-        let queryString = `SELECT * FROM ${tableInput} WHERE ${col} ="${vals}";`;
+        let queryString = `SELECT * FROM ${tableInput} WHERE ${col} = "${vals}";`;
         connection.query(queryString, function (err, result) {
+            console.log(queryString, "line54 orm")
             if (err) {
                 throw err;
             }
@@ -147,6 +148,7 @@ const orm = {
         queryString += "VALUES (?,?,?);";
 
         connection.query(queryString, vals, function (e, result) {
+            console.log(queryString, vals)
             if (e) {
                 throw e;
             }
