@@ -33,7 +33,6 @@ const books = {
             cb(res);
         })
     },
-
     deleteOne: function (condition, cb) {
         orm.deleteOne("books", condition, function (res) {
             cb(res);
