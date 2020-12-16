@@ -28,6 +28,12 @@ const books = {
             cb(res);
         })
     },
+    updateOneWhere: function(objColVals, condition1, condition2, condition3, cb){
+        orm.updateOneWhere("books", objColVals, condition1, condition2, condition3, function(res){
+            cb(res);
+        })
+    },
+
     deleteOne: function (condition, cb) {
         orm.deleteOne("books", condition, function (res) {
             cb(res);

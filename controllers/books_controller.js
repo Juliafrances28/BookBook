@@ -143,6 +143,7 @@ router.put("/api/borrow/:bookId", function (req, res) {
 });
 
 
+//Returns a book
 router.put("/api/:bookId/return", function (req, res) {
     //change availability from false to true
     //change checkedout from true to false
@@ -204,6 +205,54 @@ router.get("/gbooks/:book", function (req, res) {
     }).then(function (response) {
         res.json(response);
     });
+
+});
+
+//When "add to library" is clicked, we need to send the backend title, author, genre, gbooksId
+router.post("/library/new/", function (req, res) {
+    books.insertOne([
+        //STILL NEED TO FIGURE OUT THE USER ID SITUATION
+        "title", "author", "genre", "isbn"
+    ], [
+        req.body.title, req.body.author, req.body.genre, req.body.isbn
+    ], function (result) {
+        res.json(result);
+    })
+});
+
+
+//When "request to borrow" is clicked, we check for the ISBN # in the "books" table WHERE available = true
+router.put("/borrow/:isbn", function(req,res){
+    //First need to set available=false  where isbn=value and checkedOut = false
+    //THEN set checkedOut = true where isbn = value
+    let isbn2 = req.params.isbn;
+
+    let condition1 ="isbn ="+isbn2;
+    let condition2= "available = true";
+    let condition3 = "checkedOut=false";
+    //First set available equal to false
+    books.updateOneWhere({
+        available: false
+    }, condition1, condition2, condition3, function(result){
+        if(result.changedRows==0){
+            return res.status(400).end();
+        }else{
+            changeSecondOne();
+        }
+    });
+
+    //Change checkedOut to be true
+    function changeSecondOne(){
+        books.updateOne({
+            checkedOut:true
+        }, condition1, function(result){
+            if(result.changedRows==0){
+                return res.status(400).end();
+            }else{
+                res.json({isbn: isbn2});
+            }
+        })
+    }
 
 });
 
