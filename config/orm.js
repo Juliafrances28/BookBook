@@ -57,6 +57,15 @@ const orm = {
             cb(result);
         });
     },
+    selectWhereTwo: function(tableInput, col1, val1, col2, val2, cb){
+        let queryString = `SELECT*FROM ${tableInput} WHERE ${col1} ="${val1}" AND ${col2} = ${val2};`;
+        connection.query(queryString, function(err,result){
+            if (err){
+                throw err;
+            }
+            cb(result);
+        })
+    },
     //insertOne()
     insertOne: function (table, cols, vals, cb) {
         let queryString = "INSERT INTO " + table;
@@ -84,6 +93,27 @@ const orm = {
         queryString += objToSql(objColVals);
         queryString += " WHERE ";
         queryString += condition;
+
+        console.log(queryString);
+        connection.query(queryString, function (err, result) {
+            if (err) {
+                throw err;
+            }
+
+            cb(result);
+        });
+    },
+    updateOneWhere: function (table, objColVals, condition1, condition2, condition3, cb) {
+        let queryString = "UPDATE " + table;
+
+        queryString += " SET ";
+        queryString += objToSql(objColVals);
+        queryString += " WHERE ";
+        queryString += condition1;
+        queryString += " AND ";
+        queryString += condition2;
+        queryString += " AND ";
+        queryString += condition3;
 
         console.log(queryString);
         connection.query(queryString, function (err, result) {
