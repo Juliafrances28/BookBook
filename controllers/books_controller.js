@@ -212,51 +212,58 @@ router.get("/gbooks/:book", function (req, res) {
 router.post("/library/new/", function (req, res) {
     books.insertOne([
         //STILL NEED TO FIGURE OUT THE USER ID SITUATION
-        "title", "author", "genre", "isbn"
+        "title", "author", "genre", "isbn", "ownerId", "ownerEmail"
     ], [
-        req.body.title, req.body.author, req.body.genre, req.body.isbn
+        req.body.title, req.body.author, req.body.genre, req.body.isbn,
+        req.body.ownerId, req.body.ownerEmail
     ], function (result) {
         res.json(result);
-    })
+    });
 });
 
 
 //When "request to borrow" is clicked, we check for the ISBN # in the "books" table WHERE available = true
-router.put("/borrow/:isbn", function(req,res){
+router.put("/borrow/:isbn", function (req, res) {
     //First need to set available=false  where isbn=value and checkedOut = false
     //THEN set checkedOut = true where isbn = value
     let isbn2 = req.params.isbn;
 
-    let condition1 ="isbn ="+isbn2;
-    let condition2= "available = true";
+    let condition1 = "isbn =" + isbn2;
+    let condition2 = "available = true";
     let condition3 = "checkedOut=false";
+
     //First set available equal to false
     books.updateOneWhere({
-        available: false
-    }, condition1, condition2, condition3, function(result){
-        if(result.changedRows==0){
+        available: req.body.available
+    }, condition1, condition2, condition3, function (result) {
+        if (result.changedRows == 0) {
             return res.status(400).end();
-        }else{
+        } else {
             changeSecondOne();
         }
     });
 
     //Change checkedOut to be true
-    function changeSecondOne(){
+    function changeSecondOne() {
         books.updateOne({
-            checkedOut:true
-        }, condition1, function(result){
-            if(result.changedRows==0){
+            checkedOut: req.body.checkedOut
+        }, condition1, function (result) {
+            if (result.changedRows == 0) {
                 return res.status(400).end();
-            }else{
-                res.json({isbn: isbn2});
+            } else {
+                res.json({ isbn: isbn2 });
             }
         })
     }
 
 });
 
-
+//We want to be able to get all of the books that are available - maybe we should limit the number of responses?
+router.get("/books/available", function(req, res){
+    books.selectWhere("available", 1, function (data) {
+        res.json(data);
+    });
+})
 
 // Export routes for server.js to use.
 module.exports = router;

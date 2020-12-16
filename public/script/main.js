@@ -1,5 +1,23 @@
 $(function () {
 
+    //When user clicks "Book inventory" they are redirected to the library
+    $(document).on("click", ".inventory", function (result) {
+        window.location.replace("../library/");
+    });
+
+
+    //Will need wrapper function to get user's first name, email, and id
+    //For testing purposes will use the following
+    let userId = 1;
+    let firstName = "samplefirtname";
+    let userEmail = "sample@gmail.com";
+
+    //We want the span to populate with the user's first name
+    let nameSpan = $(".firstName");
+    nameSpan.empty();
+    nameSpan.text(firstName);
+
+
     const searchBox = $("#searchForm");
 
     //If the person presses the key it searches - NEED TO CHANGE THIS ONCE THE BUTTON IS UPDATED
@@ -8,22 +26,16 @@ $(function () {
         searchGBooks();
     });
 
-    //Need to make a get request to get the user ID and email
-
-
-
     //When "add to library" is clicked, we need to send the backend title, author, genre, gbooksId
     //We also need to somehow get the userId TALK TO DAVID
     $(document).on("click", ".addToLibrary", function (event) {
         //Should dynamically make the data-gbooksId of the element the id number
         event.preventDefault();
-        console.log("test");
 
         let isbn = $(this).data("isbn13");
 
         $.get(`/gbooks/${isbn}`, function (data) {
             let item = data.items[0].volumeInfo;
-
             let title = item.title;
             let author = item.authors[0];
             let genre = item.categories[0];
@@ -33,7 +45,9 @@ $(function () {
                 title: title,
                 author: author,
                 genre: genre,
-                isbn: isbn
+                isbn: isbn,
+                ownerId: userId,
+                ownerEmail: userEmail
             };
 
 
@@ -58,8 +72,35 @@ $(function () {
         //Search through the books table, find all available books of that isbn number
         let isbn = $(this).data("isbn13");
 
-        console.log(isbn);
-    })
+        let newAvailability = {
+            available: false,
+            checkedOut: true
+        }
+
+        //WILL NEED TO ADD IN borrowedBy here as well
+
+
+        $.ajax(`/borrow/${isbn}`, {
+            type: "PUT",
+            data: JSON.stringify(newAvailability),
+            dataType: 'json',
+            contentType: 'application/json'
+        }).then(function () {
+
+            location.reload();
+        });
+    });
+
+    //A list of available books will populate below these will be at random
+    let availableEl = $(".available.book");
+
+    $.ajax("/books/available", {
+        type: "GET"
+    }).then(function (data) {
+        //The data should have the image URLs in it
+    });
+
+
 
     function searchGBooks() {
         //Need to save what the user searches
