@@ -19,8 +19,9 @@ module.exports = function (app) {
         res.sendFile(path.join(__dirname, "../public/html/homepage.html"));
     });
      //Route to look at library of a user
+     //THIS WILL BE CHANGED!!
     app.get("/library", function(req,res){
-        res.sendFile(path.join(__dirname, "../public/html/library.html"));
+        res.sendFile(path.join(__dirname, "../public/html/libtest.html"));
     });
 
     //Route for registration page
