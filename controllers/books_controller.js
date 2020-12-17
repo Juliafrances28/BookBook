@@ -47,10 +47,13 @@ router.post("/register", async function (req, res) {
         const scrambled = await bcrypt.hash(req.body.password, salt)
         console.log(scrambled)
         //sending up to array.  ***Need to figure out how to send to database**
-        books.createUser(["name", "email", "secret"], [req.body.name, req.body.email, scrambled], function (result) {
+
+        ///////////// NOTE FROM Rich - 12-16-2020 changing this since we split name into first name and last name/////////////////
+        //
+        books.createUser(["first_name","last_name", "email", "secret"], [req.body.first_name, req.body.last_name, req.body.email, scrambled], function (result) {
             console.log("line48 controller. ")
         })
-
+        /////////////////////////////////////////
 
 
     } catch (error) {
