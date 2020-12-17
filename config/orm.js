@@ -58,7 +58,7 @@ const orm = {
             cb(result);
         });
     },
-    selectWhereTwo: function(tableInput, col1, val1, col2, val2, cb){
+        selectWhereTwo: function(tableInput, col1, val1, col2, val2, cb){
         let queryString = `SELECT*FROM ${tableInput} WHERE ${col1} ="${val1}" AND ${col2} = ${val2};`;
         connection.query(queryString, function(err,result){
             if (err){
@@ -104,7 +104,7 @@ const orm = {
             cb(result);
         });
     },
-    updateOneWhere: function (table, objColVals, condition1, condition2, condition3, cb) {
+        updateOneWhere: function (table, objColVals, condition1, condition2, condition3, cb) {
         let queryString = "UPDATE " + table;
 
         queryString += " SET ";

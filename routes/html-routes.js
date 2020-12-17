@@ -18,8 +18,7 @@ module.exports = function (app) {
     app.get("/home", function (req, res) {
         res.sendFile(path.join(__dirname, "../public/html/homepage.html"));
     });
- 
-    //Route to look at library of a user
+     //Route to look at library of a user
     app.get("/library", function(req,res){
         res.sendFile(path.join(__dirname, "../public/html/library.html"));
     });
@@ -27,6 +26,12 @@ module.exports = function (app) {
     //Route for registration page
     app.get("/registration", function(req,res){
         res.sendFile(path.join(__dirname, "../public/html/registration.html"));
+    });
+ 
+    // add route loads the add.html page,
+    // where users can enter new characters to the db
+    app.get("/index", function (req, res) {
+        res.sendFile(path.join(__dirname, "../public/html/index.html"));
     });
  
  
