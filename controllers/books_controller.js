@@ -49,8 +49,9 @@ router.post("/", async function (req, res) {
         const scrambled = await bcrypt.hash(req.body.password, salt)
         console.log(scrambled)
         //sending up to array.  ***Need to figure out how to send to database**
-        books.createUser(["name", "email", "secret"], [req.body.name, req.body.email, scrambled], function (result) {
-        
+
+        books.createUser(["first_name", "last_name", "email", "secret"], [req.body.first_name, req.body.last_name, req.body.email, scrambled], function (result) {
+
         })
 
 
@@ -60,15 +61,12 @@ router.post("/", async function (req, res) {
             throw error;
 
     }
-
-    console.log(req, "line52")
     res.redirect("/login");
 
 
 })
 
 router.get("/login", isNotUser, function (req, res) {
-=======
     res.sendFile(path.join(__dirname, "../public/html/login.html"));
     // console.log(req.session.passport)
     console.log(req.user, "line72 controller")
