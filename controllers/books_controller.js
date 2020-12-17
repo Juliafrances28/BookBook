@@ -68,6 +68,7 @@ router.post("/", async function (req, res) {
 })
 
 router.get("/login", isNotUser, function (req, res) {
+=======
     res.sendFile(path.join(__dirname, "../public/html/login.html"));
     // console.log(req.session.passport)
     console.log(req.user, "line72 controller")
@@ -107,16 +108,8 @@ router.get("/api/bookUser", function (req, res) {
 
 });
 
-//Looks for books based on genre and user input
-router.get("/api/books/:genre", function (req, res) {
-    let genre = req.params.genre;
 
-    books.selectWhere("genre", genre, function (data) {
-        res.json(data);
-    })
-});
-
-
+//Gets entry from table from book id
 router.get("/api/bookById/:id", function (req, res) {
     let id = req.params.id;
     books.selectWhere("gbookId", id, function (data) {
@@ -156,7 +149,7 @@ router.put("/api/borrow/:bookId", function (req, res) {
     }
 });
 
-
+//Can mark a book as returned
 router.put("/api/:bookId/return", function (req, res) {
     //change availability from false to true
     //change checkedout from true to false
@@ -202,6 +195,16 @@ router.delete("/api/:bookId/delete", function (req, res) {
     });
 });
 
+//We want to add an item to the wishlist
+router.post("/wishlist", function(req, res){
+    books.insertOneWish([
+        "userId", "title", "author", "isbn"
+    ], [
+        req.body.data.userId, req.body.data.title, req.body.data.author, req.body.data.isbn
+    ], function(result){
+        res.json(result);
+    })
+})
 //Google Books
 
 //When the user gives a search entry, we return the JSON from google books - get request
@@ -225,10 +228,10 @@ router.get("/gbooks/:book", function (req, res) {
 router.post("/library/new/", function (req, res) {
     books.insertOne([
         //STILL NEED TO FIGURE OUT THE USER ID SITUATION
-        "title", "author", "genre", "isbn", "ownerId", "ownerEmail"
+        "title", "author", "genre", "isbn", "ownerId", "ownerEmail", "imgUrl"
     ], [
         req.body.title, req.body.author, req.body.genre, req.body.isbn,
-        req.body.ownerId, req.body.ownerEmail
+        req.body.ownerId, req.body.ownerEmail, req.body.imgUrl
     ], function (result) {
         res.json(result);
     });
@@ -243,7 +246,7 @@ router.put("/borrow/:isbn", function (req, res) {
 
     let condition1 = "isbn =" + isbn2;
     let condition2 = "available = true";
-    let condition3 = "checkedOut=false";
+    let condition3 = "borrowed=false";
 
     //First set available equal to false
     books.updateOneWhere({
@@ -256,10 +259,10 @@ router.put("/borrow/:isbn", function (req, res) {
         }
     });
 
-    //Change checkedOut to be true
+    //Change borrowed to be true
     function changeSecondOne() {
         books.updateOne({
-            checkedOut: req.body.checkedOut
+            borrowed: req.body.checkedOut
         }, condition1, function (result) {
             if (result.changedRows == 0) {
                 return res.status(400).end();
