@@ -1,0 +1,98 @@
+/* Import UIkit default theme (or uikit.less with only core styles) */
+@import "node_modules/uikit/src/less/uikit.theme.less";
+
+/* Universal styling */
+* {
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+/* Applies to the whole page */
+html {
+  /* Green background Rich ! from Zo =) */
+  background-color: rgb(42, 143, 59);
+  color: white;
+}
+
+.uk-navbar-left {
+  align-items: left;
+}
+
+h2 {
+  color: white;
+}
+
+h1 {
+  color: white;
+  text-align: center;
+}
+
+h3 {
+  color: white;
+  text-align: center;
+  top: 50%;
+}
+/*  Book Book slogin 
+#book-slogin {
+  color: white;
+} */
+
+/* Client-input
+#client-input {
+  text-align: center;
+} */
+
+/* 
+Creat account section
+#accountCreate {
+  text-align: center;
+  color: white;
+  text-decoration: underline;
+} */
+
+/* unvisited link 
+a:link {
+  color: red;
+} */
+
+/* reading gif
+#reading-gif {
+  width: 80px;
+  height: 80px;
+  border: solid 2px;
+  border-radius: solid 2px;
+} */
+
+/* #video-book {
+  text-align: center;
+} */
+
+.uk-container {
+  text-align: center;
+}
+
+#bookBtn:hover {
+  background-color: lightgray;
+  transition: right 2s ease-in-out 0.5s;
+  cursor: pointer;
+}
+
+#bookBtn {
+  text-align: center;
+  display: block;
+  margin-top: 10px 5px;
+  margin-bottom: 20px 5px;
+  font-size: 16px;
+  line-height: 22px;
+  border: 1px solid;
+  position: relative;
+  left: 45%;
+}
+
+.bookImg {
+  text-align: center;
+}
+
+footer {
+  text-align: center;
+}
