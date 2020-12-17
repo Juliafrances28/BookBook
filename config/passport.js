@@ -11,8 +11,9 @@ passport.use(new LocalStrategy(
     },
     function (email, password, done) {
         books.selectUser("email", email, function (dbEmail) {
+            console.log(dbEmail, "line14 passport.js")
 
-            if (!dbEmail) {
+            if (dbEmail.length === 0) {
                 return done(null, false, {
                     message: "No Email on file"
                 });

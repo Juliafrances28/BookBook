@@ -11,7 +11,6 @@ const books = require("../models/books.js");
 
 const router = express.Router();
 
-const users = []
 
 //This is required to do the google books backend stuff
 const fetch = require("node-fetch");
@@ -24,9 +23,14 @@ const API_KEY = process.env.API_KEY;
 
 // Import the model (cat.js) to use its database functions.
 const bookbook = require("../models/books.js");
+const e = require("express");
+const passport = require("../config/passport");
 
 router.get("/", function (req, res) {
-    res.sendFile(path.join(__dirname, "public/index.html"));
+    console.log("flash")
+
+    res.sendFile(path.join(__dirname, "../index.html"), { message: req.flash("test") });
+
 });
 
 //serve up home page if the user logs in
@@ -43,23 +47,47 @@ router.post("/register", async function (req, res) {
         const scrambled = await bcrypt.hash(req.body.password, salt)
         console.log(scrambled)
         //sending up to array.  ***Need to figure out how to send to database**
+        books.createUser(["name", "email", "secret"], [req.body.name, req.body.email, scrambled], function (result) {
+            console.log("line48 controller. ")
+        })
 
 
-    } catch {
-        console.log(err)
+
+    } catch (error) {
+        if (error)
+            throw error;
 
     }
-    books.createUser(["name", "email", "secret"], [req.body.name, req.body.email, scrambled], function (result) {
-        console.log(result, "line57 controller. ")
-    })
 
-    res.status(200).send("thanks");
+    console.log(req, "line52")
+    res.redirect("/login");
 
+
+})
+
+router.get("/login", function (req, res) {
+    res.sendFile(path.join(__dirname, "../public/html/login.html"));
+    console.log(req.session.passport)
+    // console.log(req.user, "line68 controller")
+})
+
+router.post("/login", passport.authenticate("local", {
+    failureRedirect: "/",
+    failureFlash: true,
+    message:"test"
+}), function (req, res) {
+    //  res.json(req.user)
+    res.redirect("/home")
 
 })
 
 
 
+router.get("/home", function (req, res) {
+    // console.log(req.user)
+    res.sendFile(path.join(__dirname, "../public/html/homepage.html"));
+    // console.log(req)
+})
 
 
 
@@ -73,7 +101,8 @@ router.post("/api/bookUser/check", async function (req, res) {
         }
 
     } catch {
-        console.log("did not work")
+        if (err)
+            throw err;
     }
 
 });
@@ -143,7 +172,6 @@ router.put("/api/borrow/:bookId", function (req, res) {
 });
 
 
-//Returns a book
 router.put("/api/:bookId/return", function (req, res) {
     //change availability from false to true
     //change checkedout from true to false
@@ -208,62 +236,7 @@ router.get("/gbooks/:book", function (req, res) {
 
 });
 
-//When "add to library" is clicked, we need to send the backend title, author, genre, gbooksId
-router.post("/library/new/", function (req, res) {
-    books.insertOne([
-        //STILL NEED TO FIGURE OUT THE USER ID SITUATION
-        "title", "author", "genre", "isbn", "ownerId", "ownerEmail"
-    ], [
-        req.body.title, req.body.author, req.body.genre, req.body.isbn,
-        req.body.ownerId, req.body.ownerEmail
-    ], function (result) {
-        res.json(result);
-    });
-});
 
-
-//When "request to borrow" is clicked, we check for the ISBN # in the "books" table WHERE available = true
-router.put("/borrow/:isbn", function (req, res) {
-    //First need to set available=false  where isbn=value and checkedOut = false
-    //THEN set checkedOut = true where isbn = value
-    let isbn2 = req.params.isbn;
-
-    let condition1 = "isbn =" + isbn2;
-    let condition2 = "available = true";
-    let condition3 = "checkedOut=false";
-
-    //First set available equal to false
-    books.updateOneWhere({
-        available: req.body.available
-    }, condition1, condition2, condition3, function (result) {
-        if (result.changedRows == 0) {
-            return res.status(400).end();
-        } else {
-            changeSecondOne();
-        }
-    });
-
-    //Change checkedOut to be true
-    function changeSecondOne() {
-        books.updateOne({
-            checkedOut: req.body.checkedOut
-        }, condition1, function (result) {
-            if (result.changedRows == 0) {
-                return res.status(400).end();
-            } else {
-                res.json({ isbn: isbn2 });
-            }
-        })
-    }
-
-});
-
-//We want to be able to get all of the books that are available - maybe we should limit the number of responses?
-router.get("/books/available", function(req, res){
-    books.selectWhere("available", 1, function (data) {
-        res.json(data);
-    });
-})
 
 // Export routes for server.js to use.
 module.exports = router;
