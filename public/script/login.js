@@ -168,14 +168,12 @@ $(function () {
         });
     }
 
-
-
-
-
-
-
-
-    
-
 })
 
+
+// Zo's login page javascript 
+function play() 
+{
+  var audio = document.getElementById("audio-mouse");
+  audio.play();
+}
