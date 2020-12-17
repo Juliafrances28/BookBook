@@ -23,6 +23,11 @@ const books = {
             cb(res);
         })
     },
+    insertOneWish: function (cols, vals, cb) {
+        orm.insertOne("wishlist", cols, vals, function (res) {
+            cb(res);
+        })
+    },
     updateOne: function (objColVals, condition, cb) {
         orm.updateOne("books", objColVals, condition, function (res) {
             cb(res);
