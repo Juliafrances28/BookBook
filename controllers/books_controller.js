@@ -2,6 +2,7 @@ const express = require("express");
 const path = require('path');
 const bcrypt = require('bcrypt');
 const isUser = require("../config/middleware/isUser")
+const isNotUser = require("../config/middleware/isNotUser")
 
 const orm = require("../config/orm.js");
 
@@ -26,9 +27,10 @@ const bookbook = require("../models/books.js");
 const e = require("express");
 const passport = require("../config/passport");
 
-router.get("/", function (req, res) {
-    console.log("flash")
-
+router.get("/", isNotUser, function (req, res) {
+    console.log("Sent to home because no user was found")
+    //we should not have req.user since they did not pass authentication and were redirected here 
+    // console.log(req)
     res.sendFile(path.join(__dirname, "../index.html"), { message: req.flash("test") });
 
 });
@@ -39,7 +41,7 @@ router.get("/", function (req, res) {
 // });
 
 //ascynhronous library bcrypt needed.  Need async, await, try and catch
-router.post("/register", async function (req, res) {
+router.post("/", async function (req, res) {
     try {
         //part of the 2 arguments needed to create hashed password ** I can use a number only if needed and delete the salt variable.  Default is 10
         const salt = await bcrypt.genSalt();
@@ -48,7 +50,7 @@ router.post("/register", async function (req, res) {
         console.log(scrambled)
         //sending up to array.  ***Need to figure out how to send to database**
         books.createUser(["name", "email", "secret"], [req.body.name, req.body.email, scrambled], function (result) {
-            console.log("line48 controller. ")
+        
         })
 
 
@@ -65,48 +67,31 @@ router.post("/register", async function (req, res) {
 
 })
 
-
-router.get("/login", function (req, res) {
+router.get("/login", isNotUser, function (req, res) {
+=======
     res.sendFile(path.join(__dirname, "../public/html/login.html"));
-    console.log(req.session.passport)
-    // console.log(req.user, "line68 controller")
+    // console.log(req.session.passport)
+    console.log(req.user, "line72 controller")
 })
 
 router.post("/login", passport.authenticate("local", {
     failureRedirect: "/",
+    successRedirect: "/home",
     failureFlash: true,
-    message:"test"
+    message: "test"
 }), function (req, res) {
     //  res.json(req.user)
-    res.redirect("/home")
+    // res.send(req.user)
 
 })
 
 
 
-router.get("/home", function (req, res) {
-    // console.log(req.user)
+router.get("/home", isUser, function (req, res) {
+    //after authenticate that happends in the post login route, the redirect to /home makes req.user available
     res.sendFile(path.join(__dirname, "../public/html/homepage.html"));
-    // console.log(req)
+    console.log("Made it to home page!")
 })
-
-
-
-router.post("/api/bookUser/check", async function (req, res) {
-    const user = users.find(user => user.email = req.body.email)
-    try {
-        if (await bcrypt.compare(req.body.password, user.password)) {
-            res.send("Congratulations")
-        } else {
-            res.send("Not the same Password")
-        }
-
-    } catch {
-        if (err)
-            throw err;
-    }
-
-});
 
 //Server side API calls go here
 router.get("/allbooks", function (req, res) {
@@ -290,7 +275,7 @@ router.put("/borrow/:isbn", function (req, res) {
 });
 
 //We want to be able to get all of the books that are available - maybe we should limit the number of responses?
-router.get("/books/available", function(req, res){
+router.get("/books/available", function (req, res) {
     books.selectWhere("available", 1, function (data) {
         res.json(data);
     });

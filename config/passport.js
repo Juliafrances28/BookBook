@@ -1,6 +1,7 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy
 const books = require("../models/books.js");
+const bcrypt = require('bcrypt');
 
 
 passport.use(new LocalStrategy(
@@ -10,27 +11,30 @@ passport.use(new LocalStrategy(
 
     },
     function (email, password, done) {
-        books.selectUser("email", email, function (dbEmail) {
-            console.log(dbEmail, "line14 passport.js")
+        books.selectUser("email", email, async function (user) {
 
-            if (dbEmail.length === 0) {
+            if (user.length === 0) {
                 return done(null, false, {
                     message: "No Email on file"
                 });
             }
+            try {
+                //compares password enteted into database.
+                if (await bcrypt.compare(password, user[0].secret)) {
+                    return done(null, user)
+                } else {
+                    return done(null, false, { message: "password incorrect" })
+                }
+            } catch (e) {
+                if (e)
+                    throw e;
 
-            return done(null, dbEmail)
+            }
+
+            return done(null, user)
 
         })
-
-
-
     }
-
-
-
-
-
 ))
 passport.serializeUser(function (user, cb) {
     cb(null, user);
