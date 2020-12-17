@@ -49,13 +49,23 @@ const orm = {
     },
     //selectWhere
     selectWhere: function (tableInput, col, vals, cb) {
-        let queryString = `SELECT * FROM ${tableInput} WHERE ${col} ="${vals}";`;
+        let queryString = `SELECT * FROM ${tableInput} WHERE ${col} = "${vals}";`;
         connection.query(queryString, function (err, result) {
+            console.log(queryString, "line54 orm")
             if (err) {
                 throw err;
             }
             cb(result);
         });
+    },
+        selectWhereTwo: function(tableInput, col1, val1, col2, val2, cb){
+        let queryString = `SELECT*FROM ${tableInput} WHERE ${col1} ="${val1}" AND ${col2} = ${val2};`;
+        connection.query(queryString, function(err,result){
+            if (err){
+                throw err;
+            }
+            cb(result);
+        })
     },
     //insertOne()
     insertOne: function (table, cols, vals, cb) {
@@ -94,6 +104,27 @@ const orm = {
             cb(result);
         });
     },
+        updateOneWhere: function (table, objColVals, condition1, condition2, condition3, cb) {
+        let queryString = "UPDATE " + table;
+
+        queryString += " SET ";
+        queryString += objToSql(objColVals);
+        queryString += " WHERE ";
+        queryString += condition1;
+        queryString += " AND ";
+        queryString += condition2;
+        queryString += " AND ";
+        queryString += condition3;
+
+        console.log(queryString);
+        connection.query(queryString, function (err, result) {
+            if (err) {
+                throw err;
+            }
+
+            cb(result);
+        });
+    },
     //deleteOne()
     deleteOne: function (table, condition, cb) {
         let queryString = "DELETE FROM " + table;
@@ -117,6 +148,7 @@ const orm = {
         queryString += "VALUES (?,?,?);";
 
         connection.query(queryString, vals, function (e, result) {
+            console.log(queryString, vals)
             if (e) {
                 throw e;
             }

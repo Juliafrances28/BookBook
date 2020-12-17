@@ -2,14 +2,6 @@ Drop Database If Exists bookbookdb;
 Create Database bookbookdb;
 USE bookbookdb;
 
-/*Drop Table If Exists Categories;
-Create Table Categories (
-    id INT Auto_Increment,
-    catName varchar(50),
-    Primary Key (id)
-);*/
-
-
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
     id INT Auto_Increment,
@@ -33,9 +25,14 @@ Create Table books (
     ownerEmail varchar(50),
     book_nickname varchar(50),
     available boolean DEFAULT FALSE,    
-    checkedOut boolean DEFAULT FALSE,
-    CONSTRAINT FK_Books_ownerId FOREIGN KEY (ownerId) REFERENCES users(id) ON DELETE CASCADE,
-    CONSTRAINT FK_Books_ownerEmail FOREIGN KEY (ownerEmail) REFERENCES users(email) ON DELETE CASCADE,
+    borrowed boolean DEFAULT FALSE,
+    borrowerId INT DEFAULT NULL,
+    borrowerEmail varchar(50) DEFAULT NULL,
+    imgUrl varchar(50) DEFAULT NULL,
+    CONSTRAINT FK_Books_OwnerId FOREIGN KEY (ownerId) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT FK_Books_OwnerEmail FOREIGN KEY (ownerEmail) REFERENCES users(email) ON DELETE CASCADE,
+    CONSTRAINT FK_Books_BorrowerId FOREIGN KEY (borrowerId) REFERENCES users(id),
+    CONSTRAINT FK_Books_BorrowerEmail FOREIGN KEY (borrowerEmail) REFERENCES users(email) ON DELETE CASCADE,
     Primary Key (id)  
 );
 
@@ -52,15 +49,6 @@ CREATE TABLE wishlist (
 );
 
 
-/*
-DROP TABLE IF EXISTS Owners;
-CREATE TABLE Owners (
-    id INT Auto_Increment,
-    bookId INT NOT NULL,
-    userId INT NOT NULL,
-	CONSTRAINT FK_Owners_BookId FOREIGN KEY (bookId) REFERENCES books(id) ON DELETE CASCADE,
-    CONSTRAINT FK_Owners_UserId FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,    
-    Primary Key (id)
-);*/
+
 
 
