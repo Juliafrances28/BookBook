@@ -15,47 +15,61 @@
 </head>
 
   <body>
-    
-    <h2>Book Book</h2> 
-    <!-- NavBar start U-I Kit Zo - Do not touch!!! -->
-    <nav class="uk-navbar-container" uk-navbar>
-      <div class="uk-navbar-right">
-  
-          <ul class="uk-navbar-nav">
-              <li class="uk-active uk-navbar-left"><a href="#"><img class="uk-navbar-left" src = "../css/assets/images/favicon.png" alt = "image"></span></a></li>
-              <li>
-                  <a style = "color:black;"class="uk-active" href="#">My Account</a>
-                  <div class="uk-navbar-dropdown">
-                      <ul class="uk-nav uk-navbar-dropdown-nav">
-                          <li class="uk-active inventory"><a href="#">Book inventory</a></li>
-                          <li class="uk-active sign-out"><a href="#">Sign out</a></li>
+    <!-- Page title Zo -->
+    <h1 class = "uk-animation-slide-left">Book Book</h1> 
 
-                      </ul>
-                  </div>
-              </li>
-          </ul>
-    </nav>
+    <!-- NavBar start U-I Kit Zo - Do not touch!!! -->
+    <div class="uk-position-relative">
+
+      <!-- book-banner Zo -->
+      <img class = "uk-animation-slide-top"id="book-banner" src="../css/assets/images/book-homepage.png" alt="book-banner">
+      <div class="uk-position-top">
+          <nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
+              <div class="uk-navbar-right">
+                  <ul class="uk-navbar-nav">
+                      <li>
+                          <p class="uk-active uk-container uk-padding">
+                            <img class = "uk-animation-shake" id = "favicon"src="../css/assets/images/favicon.png" alt="">My Account</p>
+                          <div class="uk-navbar-dropdown uk-padding-right">
+                              <ul class="uk-nav uk-navbar-dropdown-nav">
+                                  <li class="uk-active "><a  href="../html/bookinventory.html" uk-icon ="icon: database">Book Inventory</a></li>
+                                  <!-- Just incase we need it Zo -->
+                                  <li class="uk-active"><a href="../html/login.html" uk-icon="icon: sign-out">Sign Out</a></li>
+                              </ul>
+                          </div>
+                      </li>
+                  </ul>
+              </div>
+          </nav>
+      </div>
+  </div>
+<!-- Nav bar end Zo -->
+
     <!-- Search slogan -->
-<h4 class = "uk-padding" style = " color:white" >What book are you reading today <span class="firstName">Almonzo</span>?</h4>
+<h4 class = "uk-padding font-question" style = "color:white" >What book are you reading today <a class="uk-animation-shake firstName">Almonzo</a>? <img id = "book-question" src  = "../css/assets/images/giphy.gif" alt = "book-result"></h4>
+
 <!-- Search Bar Zo -->
 <div class="uk-margin">
-  <form class="uk-search uk padding uk-search-default uk-width-2-2" id="searchForm">
-      <span style = " color:white;"  uk-search-icon></span>
-      <input style = " color:white;"class="uk-search-input" type="search" style = " color:white;" placeholder ="Search books..." required >
+  <form class="uk-search uk padding uk-search-default uk-width-2-2">
+      <span style = " color:white; font-size:700;"  uk-search-icon></span>
+      <!-- Search bar code Zo -->
+      <input style = " color:white;"class="uk-search-input" onclick= "play()" type="search" required >
   </form>
 </div>
 
-  <!-- <img class ="uk-align-center uk-padding" src  = "./css/assets/images/Book-example.jpg" alt = "book-result">
-  <img class ="uk-align-center uk-padding" src  = "./css/assets/images/Book-example.jpg" alt = "book-result"> -->
+<!-- Search sound Zo -->
+<audio id="book-audio-search" src="../css/assets/bgm/Page_turn.mp3"></audio>
+
+<!-- Button sound Zo -->
+<audio id="audio-mouse" src="./public/css/assets/bgm/Mouse_click.mp3"></audio>
 
 <!-- Search bar stuff end Zo-->
-
-<h4 style = "color:white" class= "uk-padding"> Book results:</h4>
+<h4 style = "color:white" class= "uk-padding uk-width-medium"> Book results:</h4>
   
 <!-- Stock images - possible api section for books Zo -->
   <div class="uk-flex uk-flex-center ">
     <div class="uk-card uk-card uk-card-body results-images">
-      <a><img src  = "../css/assets/images/Book-example.png" alt = "book-result"></a>
+      <a><img isrc  = "../css/assets/images/Book-example.png" alt = "book-result"></a>
     </div>
     <div class="uk-card uk-card uk-card-body uk-margin-left results-images">
       <a><img src = "../css/assets/images/Book-example.jpg" alt = "book-result"></a>
@@ -71,7 +85,8 @@
     </div>
 </div>
 
-<h4 style = "color:white" class= "uk-padding">Currently available books:</h4>
+  <!-- Seems shorter to me Julia to just say Available -->
+<h4 style = "color:white" class= "uk-padding">Available books:</h4>
 
 <!-- Stock images - possible recommnend api section for books Zo -->
 <div class="uk-flex uk-flex-center ">
@@ -96,28 +111,21 @@
 </div>
 
 
+  <!-- Footer animation Zo-->
+  <div class="uk-animation-toggle" tabindex="0">
+    <div class="uk-animation-shake">
 
+        <!-- Team footer-->
+        <footer id="footer">&#169; 2020 Team Four 😎, Project Two</footer>
 
-
-<!-- Button choices for books -->
-<div class="uk-flex uk-flex-center">
-  <div class="uk-margin-left">
-    <button  style = " color:blue" >Checkout Book</button>
-  </div>
-  <div class=" uk-margin-left">
-    <button style = " color:green"  >Return Book</button>
-  </div>
-  <div class=" uk-margin-left">
-    <button style = " color:red" >Share book</button>
-  </div>
-  </div>
-
+        <!-- Spacing -->
         <br>
-         <!-- Team Footer section -->
-            <footer id = "footer">&#169; 2020 Team Four 😎, Project Two</footer>
-        <br>
+
+    </div>
+</div>
   </body>
 <script src="https://cdn.jsdelivr.net/npm/uikit@3.5.15/dist/js/uikit.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/uikit@3.5.15/dist/js/uikit-icons.min.js"></script>
-<script src="uikit/dist/js/uikit-icons.min.js"></script>
+<!-- Zo's homepage javascript -->
+<script src = "../script/homepage.js"></script>
 </html>

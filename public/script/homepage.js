@@ -273,5 +273,20 @@ $(function () {
  
 })
  
+
+// Zo's login page javascript 
+function play() 
+// Juli/David/or Rich code this so when the user hit enter key in search for home page it works.
+{
+    var sound = document.getElementById("book-audio-search");
+    sound.play();
+}
+
+// Julia/David/Rich code this so onclick this will play for the buttons thanks
+function play() 
+{
+    var sound = document.getElementById("audio-mouse-click");
+    sound.play();
+}
  
 
