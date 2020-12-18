@@ -27,11 +27,12 @@ const bookbook = require("../models/books.js");
 const e = require("express");
 const passport = require("../config/passport");
 
-router.get("/", isNotUser, function (req, res) {
+
+router.get("/", function (req, res) {
     console.log("Sent to home because no user was found")
     //we should not have req.user since they did not pass authentication and were redirected here 
     // console.log(req)
-    res.sendFile(path.join(__dirname, "../index.html"), { message: req.flash("test") });
+    res.sendFile(path.join(__dirname, "../public/html/registration.html"), { message: req.flash("test") });
 
 });
 
@@ -42,14 +43,13 @@ router.get("/", isNotUser, function (req, res) {
 
 //ascynhronous library bcrypt needed.  Need async, await, try and catch
 router.post("/", async function (req, res) {
+
     try {
         //part of the 2 arguments needed to create hashed password ** I can use a number only if needed and delete the salt variable.  Default is 10
         const salt = await bcrypt.genSalt();
         //takes user password and scrambles it
         const scrambled = await bcrypt.hash(req.body.password, salt)
-        console.log(scrambled)
-        //sending up to array.  ***Need to figure out how to send to database**
-
+        console.log(scrambled);
         books.createUser(["first_name", "last_name", "email", "secret"], [req.body.first_name, req.body.last_name, req.body.email, scrambled], function (result) {
 
         })
@@ -61,13 +61,16 @@ router.post("/", async function (req, res) {
             throw error;
 
     }
-    res.redirect("/login");
+    res.redirect("/login")
+
+    console.log("Sent to login ")
 
 
 })
 
-router.get("/login", isNotUser, function (req, res) {
 
+router.get("/login", function (req, res) {
+    console.log("heres login!")
     res.sendFile(path.join(__dirname, "../public/html/login.html"));
     // console.log(req.session.passport)
     console.log(req.user, "line72 controller")
@@ -79,6 +82,7 @@ router.post("/login", passport.authenticate("local", {
     failureFlash: true,
     message: "test"
 }), function (req, res) {
+    console.log("test")
     //  res.json(req.user)
     // res.send(req.user)
 
@@ -365,21 +369,41 @@ router.get("/api/user_data", function (req, res) {
 
     let user
     if (!req.user) {
+
+        console.log("retrieving test user")
+        books.selectUser('id', 1, function (result) {
+            console.log(result)
+
         //console.log("retrieving test user")
         books.selectUser('id', 1, function (result) {
             //console.log(result)
+
             user = {
                 id: result[0].id,
                 first_name: result[0].first_name,
                 last_name: result[0].last_name,
                 email: result[0].email,
             }
-            //console.log("this is the test user \n " + JSON.stringify(user))
+
+            console.log("this is the test user \n " + JSON.stringify(user))
+
             res.json({ user })
         })
 
     }
     else {
+
+        books.selectUser('id', req.user.id, function (result) {
+            console.log(result)
+            console.log("this is the user info \n " + JSON.stringify(user))
+            user = {
+                id: result[0].id,
+                first_name: result[0].first_name,
+                last_name: result[0].last_name,
+                email: result[0].email,
+            }
+            res.json({ user })
+
         user = {
             id: req.user.id,
             first_name: req.user.first_name,
@@ -438,6 +462,10 @@ router.put("/available/borrow/:id", function (req, res) {
             }
         })
     }
+
+
+})
+
 
 });
 
