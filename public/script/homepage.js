@@ -110,23 +110,32 @@ $(function () {
  
         //A list of available books will populate 
         let availableEl = $(".available-book");
- 
+        
         $.ajax("/books/available", {
             type: "GET"
         }).then(function (data) {
             if (!data) {
                 return data;
             }
+            
             //For right now take the first five elements of the index
- 
             availableEl.empty();
-            for (let i = 0; i < 5; i++) {
+
+            let numberBooks = 0;
+            if(data.length <6){
+                numberBooks = data.length;
+            }
+            else{
+                numberBooks = 5;
+            }
+
+            for (let i = 0; i < numberBooks; i++) {
                 let bookTitle = data[i].title;
                 let bookAuthor = data[i].author;
                 let bookId = data[i].id;
                 let isbnNumber = data[i].isbn;
                 let imageThumbnail = data[i].imgUrl;
-                let userEmail = data[i].ownerEmail;
+
  
                 //Now generate the images
                 $(availableEl[i]).html(`<a><img src  = "${imageThumbnail}" alt = "book-result ${bookTitle}"></a>`);
@@ -144,24 +153,51 @@ $(function () {
             event.preventDefault();
  
             let id = $(this).data("bookid");
- 
+
+
+
             //We want to mark it as borrowed by the user
  
             let newAvailability = {
-                availability: false
+                available: false
             }
  
-            $.ajax("/available/borrow/" + id, {
-                TYPE: "PUT",
+
+            $.ajax({
+                url: `/available/borrow/${id}`,
+                type: "PUT",
                 data: JSON.stringify(newAvailability),
-                dataType: 'json',
-                contentType: 'application/json'
-            }).then(function () {
-                location.reload();
+                success: function(data){
+                    insertBorrowerId(id);
+                }
             })
             //We want to add borrowerId and borrowerEmail to books table
-        })
- 
+            //userId becomes the borrower ID
+        });
+
+        //Insert the borrower Id in when a user requests to borrow a book
+        function insertBorrowerId(id){
+            $.ajax({
+                url: `/insert/${userId}/${id}`,
+                type: "PUT",
+                data: `borrowerId=${userId}`,
+                success: function(data){
+                    insertBorrowerEmail(id);
+                }
+            })
+        }
+
+        //insert the borrower email into the table
+        function insertBorrowerEmail(id){
+            $.ajax({
+                url: `/insertemail/${userEmail}/${id}`,
+                type: "PUT",
+                data: `borrowerId=${userId}`,
+                success: function(data){
+                    location.reload();
+                }
+            });
+        }
         //Function to add to wishlist if the book is not available
         function addToWishList(isbn, userId) {
  
