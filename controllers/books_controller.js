@@ -111,10 +111,83 @@ router.get("/api/bookUser", function (req, res) {
 //Gets entry from table from book id
 router.get("/api/bookById/:id", function (req, res) {
     let id = req.params.id;
-    books.selectWhere("gbookId", id, function (data) {
+    books.selectWhere("isbn", id, function (data) {
         res.json(data);
     })
 });
+
+
+//Gets entry from table from book by ownerId
+router.get("/api/bookByOwnerId/:id", function (req, res) {
+    //let id = req.user.id;
+    id = 1
+    books.selectWhere("ownerId", id, function (data) {
+       // console.log("owned books: " + data )
+        res.json(data);
+    })
+});
+
+
+//User can mark a book as Unavailble for borrowing
+router.put("/api/bookUnavailable/:bookId", function (req, res) {
+    //change availability from true to false
+    //change checkedout from false to true
+
+
+    let condition = "id = " + req.params.bookId;
+    //console.log("the condition is " + condition)
+
+    books.updateOne({
+        available: false
+    }, condition, function (result) {
+        if (result.changedRows == 0) {
+            return res.status(404).end();
+        } else {
+            let id = req.params.bookId;
+            console.log("\n \n \n \n \n " + id + "\n \n \n " )
+            books.selectWhere("id", 1, function(data){
+                //console.log("the data in book from the update request is \n \n \n  " + JSON.stringify(data))
+                return res.json(data)
+
+            })
+            
+        }
+    });
+
+    
+});
+
+
+//User can mark a book as Availble for borrowing
+router.put("/api/bookAvailable/:bookId", function (req, res) {
+    //change availability from true to false
+    //change checkedout from false to true
+    
+
+    let condition = "id = " + req.params.bookId;
+    //console.log("the condition is " + condition)
+
+    books.updateOne({
+        available: true
+    }, condition, function (result) {
+        if (result.changedRows == 0) {
+            return res.status(404).end();
+        } else {
+            let id = req.params.bookId;
+            console.log("\n \n \n \n \n " + id + "\n \n \n " )
+            books.selectWhere("id", 1, function(data){
+                //console.log("the data in book from the update request is \n \n \n  " + JSON.stringify(data))
+                return res.json(data)
+
+            })
+            
+        }
+    });
+
+    
+});
+
+
 
 
 //User can mark a book as borrowed
@@ -286,23 +359,29 @@ router.get("/api/user_data", function (req, res) {
     
     let user
     if(!req.user){
-        console.log("retrieving test user")
+        //console.log("retrieving test user")
         books.selectUser('id', 1, function (result){
-            console.log(result)
+            //console.log(result)
             user = {
                 id : result[0].id,
                 first_name: result[0].first_name,
                 last_name: result[0].last_name,
                 email: result[0].email,  
             }
-            console.log("this is the test user \n " + JSON.stringify(user))
+            //console.log("this is the test user \n " + JSON.stringify(user))
             res.json({user})
         })
         
     }
     else {
+        user = {
+        id : req.user.id,
+        first_name: req.user.first_name,
+        last_name: req.user.last_name,
+        email: req.user.email,
+        }
         
-        books.selectUser('id', req.user.id, function (result){
+       /* books.selectUser('id', req.user.id, function (result){
             console.log(result)
             console.log("this is the user info \n " + JSON.stringify(user))
             user = {
@@ -311,9 +390,10 @@ router.get("/api/user_data", function (req, res) {
                 last_name: result[0].last_name,
                 email: result[0].email,
             }
-                res.json({user})
-        })
-        console.log("sent Json with User info")
+               
+        })*/
+        res.json({user})
+        //console.log("sent Json with User info")
     }
    
 })

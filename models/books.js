@@ -54,6 +54,11 @@ const books = {
             cb(res);
 
         });
+    },
+    selectWhereTwo: function (col1, val1, col2, val2, cb) {
+        orm.selectWhereTwo("books", col1, val1, col2, val2, function (res) {
+            cb(res);
+        })
     }
 }
 // Export the database functions for the controller (catsController.js).
