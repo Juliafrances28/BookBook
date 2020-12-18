@@ -1,6 +1,13 @@
+//load document then execute jquery
 $(document).ready(function(){
+    // BEGIN GLOBAL VARIABLE ASSIGNMENT
+    const searchInput = $(".uk-search-input").val().trim();
+    const searchBtn = $(".uk-search-icon-flip uk-icon uk-search-icon")
+    var userInfo // declared but no value saved, will be filled in Ajax call.
 
 
+    
+    
     /* 
     
     1. ajax call for user id - store in a variable for use later
@@ -25,45 +32,43 @@ $(document).ready(function(){
     -  ajax call to delete the book from wishlist where userId = [user id]
     
     */ 
-    
-   $.ajax('/api/user', {
+
+// immediately make ajax call to save user info into an object for later use.
+   $.ajax('/api/user_data', {
     type: "GET"
-}).then(function (data) {
-    let devourList = $("#devourList");
-    let deleteList = $("#deleteList");
-
-    let burgers = data.burgers
-    let length = burgers.length
-
-    for (let i = 0; i < length; i++) {
-        var devoured = burgers[i].devoured
-        if (devoured === 1) {
-            devoured = true
-        }
-        else {
-            devoured = false
-        }
-        console.log("the burger is" + burgers[i].burger_name + "devoured flag is set to " + devoured)
-        //check if devoured flag is sett to true, if so add to the deleteList
-        if (devoured === true) {
-
-            var new_elem = `<li id= "#${burgers[i].burger_name}" class = "mb-md-3" data-id ="${burgers[i].id}" data-devoured ="${devoured}">
-        ${burgers[i].burger_name} <button class = "ml-md-5 btn btn-danger deleteBtn" data-id ="${burgers[i].id}">DELETE</button>
-         </li>`
-            deleteList.append(new_elem);
-        }
-        else {
-
-
-            var new_elem = `<li id= "#${burgers[i].burger_name}" class = "mb-md-3" data-id ="${burgers[i].id}" data-devoured ="${devoured}">
-        ${burgers[i].burger_name} <button class = "ml-md-5 btn btn-primary devourBtn" data-id ="${burgers[i].id}" data-devourState ="${devoured}">DEVOUR</button>
-         </li>`
-            devourList.append(new_elem);
-        }
+}).then(function (response) {
+    console.log(response)
+    userInfo = {
+        id: response.user.id,
+        first_name: response.user.first_name,
+        last_name: response.user.last_name,
+        email: response.user.email,
     }
 
+    });// closes user info request
 
-});//closes get request for burgers
+
+
+function renderOwnedBooks(){
+    console.log("called renderOwnedBooks")
+   $.ajax("/api/bookById/:"+ userInfo.id, {
+    type: "GET"
+}).then(function (data) {
+
+
+
+
+
+});// closes get books by id ajax call
+
+}// closes renderOwnedBooks()
+
+$(document).on("click", searchBtn, renderOwnedBooks());
+    
+
+
+
+
     
     
     
@@ -74,4 +79,4 @@ $(document).ready(function(){
     
     
     
-    })
+    })// closes doc.ready function

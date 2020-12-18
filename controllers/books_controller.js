@@ -67,6 +67,7 @@ router.post("/", async function (req, res) {
 })
 
 router.get("/login", isNotUser, function (req, res) {
+
     res.sendFile(path.join(__dirname, "../public/html/login.html"));
     // console.log(req.session.passport)
     console.log(req.user, "line72 controller")
@@ -278,6 +279,45 @@ router.get("/books/available", function (req, res) {
         res.json(data);
     });
 })
+
+
+// API route to get logged in user's data
+router.get("/api/user_data", function (req, res) {
+    
+    let user
+    if(!req.user){
+        console.log("retrieving test user")
+        books.selectUser('id', 1, function (result){
+            console.log(result)
+            user = {
+                id : result[0].id,
+                first_name: result[0].first_name,
+                last_name: result[0].last_name,
+                email: result[0].email,  
+            }
+            console.log("this is the test user \n " + JSON.stringify(user))
+            res.json({user})
+        })
+        
+    }
+    else {
+        
+        books.selectUser('id', req.user.id, function (result){
+            console.log(result)
+            console.log("this is the user info \n " + JSON.stringify(user))
+            user = {
+                id : result[0].id,
+                first_name: result[0].first_name,
+                last_name: result[0].last_name,
+                email: result[0].email,
+            }
+                res.json({user})
+        })
+        console.log("sent Json with User info")
+    }
+   
+})
+
 
 // Export routes for server.js to use.
 module.exports = router;
