@@ -35,7 +35,16 @@ router.get("/", isNotUser, function (req, res) {
 
 });
 
-//serve up home page if the user logs in
+router.get("/", isNotUser, function (req, res) {
+    console.log("Sent to home because no user was found")
+    //we should not have req.user since they did not pass authentication and were redirected here 
+    // console.log(req)
+    res.sendFile(path.join(__dirname, "../index.html"), { message: req.flash("test") });
+
+});
+
+
+// //serve up home page if the user logs in
 // router.get("/home", isUser, function (req, res) {
 //     res.sendFile(path.join(__dirname, "public/index.html"));
 // });
@@ -84,13 +93,17 @@ router.post("/login", passport.authenticate("local", {
 
 })
 
+// router.get("/home", isUser, function (req, res) {
+//     //after authenticate that happends in the post login route, the redirect to /home makes req.user available
+//     res.sendFile(path.join(__dirname, "../public/html/homepage.html"));
+//     console.log("Made it to home page!")
+// });
 
-
-router.get("/home", isUser, function (req, res) {
+router.get("/home", function (req, res) {
     //after authenticate that happends in the post login route, the redirect to /home makes req.user available
     res.sendFile(path.join(__dirname, "../public/html/homepage.html"));
     console.log("Made it to home page!")
-})
+});
 
 //Server side API calls go here
 router.get("/allbooks", function (req, res) {
@@ -249,7 +262,7 @@ router.put("/borrow/:isbn", function (req, res) {
 
     //First set available equal to false
     books.updateOneWhere({
-        available: req.body.available
+        available: false
     }, condition1, condition2, condition3, function (result) {
         if (result.changedRows == 0) {
             return res.status(400).end();
@@ -261,12 +274,48 @@ router.put("/borrow/:isbn", function (req, res) {
     //Change borrowed to be true
     function changeSecondOne() {
         books.updateOne({
-            borrowed: req.body.checkedOut
+            borrowed: true
         }, condition1, function (result) {
             if (result.changedRows == 0) {
                 return res.status(400).end();
             } else {
                 res.json({ isbn: isbn2 });
+            }
+        })
+    }
+
+});
+
+//To mark a book as borrowed from the available list
+router.put("/available/borrow/:id", function (req, res) {
+    //First need to set available=false  where isbn=value and checkedOut = false
+    //THEN set checkedOut = true where isbn = value
+    let id = req.params.id;
+
+    let condition1 = "id=" + id;
+    let condition2 = "available = true";
+    let condition3 = "borrowed = false";
+
+    //First set available equal to false
+    books.updateOneWhere({
+        available: false
+    }, condition1, condition2, condition3, function (result) {
+        if (result.changedRows == 0) {
+            return res.status(400).end();
+        } else {
+            changeSecondOne();
+        }
+    });
+
+    //Change borrowed to be true
+    function changeSecondOne() {
+        books.updateOne({
+            borrowed: true
+        }, condition1, function (result) {
+            if (result.changedRows == 0) {
+                return res.status(400).end();
+            } else {
+                res.json({ id: id });
             }
         })
     }
