@@ -28,7 +28,7 @@ Create Table books (
     borrowed boolean DEFAULT FALSE,
     borrowerId INT DEFAULT NULL,
     borrowerEmail varchar(50) DEFAULT NULL,
-    imgUrl varchar(50) DEFAULT NULL,
+    imgUrl varchar(500) DEFAULT NULL,
     CONSTRAINT FK_Books_OwnerId FOREIGN KEY (ownerId) REFERENCES users(id) ON DELETE CASCADE,
     CONSTRAINT FK_Books_OwnerEmail FOREIGN KEY (ownerEmail) REFERENCES users(email) ON DELETE CASCADE,
     CONSTRAINT FK_Books_BorrowerId FOREIGN KEY (borrowerId) REFERENCES users(id),
