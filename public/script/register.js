@@ -22,6 +22,7 @@ $(document).ready(function () {
                 dataType: "json"
 
             }).then(function () {
+                window.location.replace("/home")
             })
 
         })
@@ -30,35 +31,10 @@ $(document).ready(function () {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 })
 
 // Zo's script file sound fx ;) sign up button
-function play() 
-{
+function play() {
     var sound = document.getElementById("mouse-click");
     sound.play();
 }
- 
