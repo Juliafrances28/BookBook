@@ -1,3 +1,4 @@
+// Team's script file
 $(document).ready(function () {
 
     $("#bookBtn").on("click", function (event) {
@@ -52,8 +53,12 @@ $(document).ready(function () {
 
 
 
-
-
-
-
 })
+
+// Zo's script file sound fx ;) sign up button
+function play() 
+{
+    var sound = document.getElementById("mouse-click");
+    sound.play();
+}
+ 
