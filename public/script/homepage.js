@@ -262,7 +262,7 @@ $(function () {
                     $(imageEl[i]).html(`<a><img src  = "${normImage}" alt = "book-result ${bookTitle}"></a>`);
                     let btnsEl = $("<div>");
                     $(btnsEl).html(`<button type=button class="btn btn-primary addToLibrary" data-isbn13="${isbn_13}">Add to library</button>
-            <button type=button class="btn btn-primary requestToBorrow" data-isbn13="${isbn_13}">Request to borrow</button>`);
+            <button type=button class="btn btn-primary requestToBorrow" data-isbn13="${isbn_13}" onclick="play()">Request to borrow</button>`);
                     $(imageEl[i]).append(btnsEl);
  
                 }
@@ -276,18 +276,12 @@ $(function () {
 })
  
 
-// // Zo's login page javascript 
-// function play() {
-//     console.log("test");
-//     let sound = document.getElementById("searchForm");
-//     sound.play();
-// }
+// Zo's homepage page - do not delete thanks =)
 
-// // Julia/David/Rich code this so onclick this will play for the buttons thanks
-// function play() 
-// {
-//     var sound = document.getElementById("audio-mouse-click");
-//     sound.play();
-// }
- 
+function play() 
+{
+    var sound = document.getElementById("button-click");
+    sound.play();
+}
+
 
