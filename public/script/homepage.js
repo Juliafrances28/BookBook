@@ -72,7 +72,6 @@ $(function () {
         $(document).on("click", ".requestToBorrow", function (event) {
             event.stopImmediatePropagation();
 
-            console.log("test1");
             //Search through the books table, find all available books of that isbn number
             let isbn = $(this).data("isbn13");
 
@@ -147,11 +146,11 @@ $(function () {
             let id = $(this).data("bookid");
 
 
-
             //We want to mark it as borrowed by the user
 
             let newAvailability = {
-                available: false
+                available: false, 
+                borrowed: true
             }
 
 
