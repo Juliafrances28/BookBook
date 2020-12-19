@@ -336,7 +336,7 @@ router.put("/borrow/:isbn", function (req, res) {
 
     //First set available equal to false
     books.updateOneWhere({
-        available: req.body.available
+        available: false
     }, condition1, condition2, condition3, function (result) {
         if (result.changedRows == 0) {
             return res.status(400).end();
@@ -348,7 +348,7 @@ router.put("/borrow/:isbn", function (req, res) {
     //Change borrowed to be true
     function changeSecondOne() {
         books.updateOne({
-            borrowed: req.body.checkedOut
+            borrowed: true
         }, condition1, function (result) {
             if (result.changedRows == 0) {
                 return res.status(400).end();
