@@ -78,6 +78,7 @@ $(document).ready(function () {
                         <img src="${bookObjArr[i].imgUrl}" alt="imgUrl for ${bookObjArr[i].title}">
                     <div class="uk-flex uk-flex-column uk-margin uk-width-1-4">
                       <button class="uk-button uk-button-secondary returnButton" data-id = "${bookObjArr[i].id}" data-avail="false">Marked as Returned</button>
+                      <button class="uk-button uk-button-primary deleteBtn libDelete" data-id = "${bookObjArr[i].id}" >Delete from Library</button>
                     </div>
                     <div class="uk-width-1-3 uk-text-center uk-margin">
                       <li ><strong> TITLE:</strong> ${bookObjArr[i].title}</li>
@@ -108,6 +109,8 @@ $(document).ready(function () {
                     <img src="${bookObjArr[i].imgUrl}" alt="imgUrl for ${bookObjArr[i].title}">
                 <div class="uk-flex uk-flex-column uk-margin uk-width-1-4">
                     <button class="uk-button uk-button-primary AvailableButton" data-id = "${bookObjArr[i].id}" data-avail="true">Marked as Available</button>
+                    <button class="uk-button uk-button-primary deleteBtn libDelete" data-id = "${bookObjArr[i].id}" >Delete from Library</button>
+                    
                 </div>
                 <div class="uk-width-1-3 uk-text-center uk-margin">
                     <li class="book_title"><strong> TITLE:</strong> ${bookObjArr[i].title}</li>
@@ -135,6 +138,7 @@ $(document).ready(function () {
                       <img src="${bookObjArr[i].imgUrl}" alt="imgUrl for ${bookObjArr[i].title}">
                     <div class="uk-flex uk-flex-column uk-margin uk-width-1-4">
                       <button class="uk-button uk-button-danger AvailableButton" data-id = "${bookObjArr[i].id}" data-avail="false">Marked Unavailable</button>
+                      <button class="uk-button uk-button-primary deleteBtn libDelete" data-id = "${bookObjArr[i].id}" >Delete from Library</button>
                     </div>
                     <div class="uk-width-1-3 uk-text-center uk-margin">
                       <li class="book_title"><strong> TITLE:</strong> ${bookObjArr[i].title}</li>
