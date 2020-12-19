@@ -61,52 +61,88 @@ $(document).ready(function () {
             type: "GET"
         }).then(function (data) {
             let bookObjArr = data
-            
+
             for (i = 0; i < bookObjArr.length; i++) {
                 let bookAvailability = bookObjArr[i].available
+                let borrowStatus = bookObjArr[i].borrowed
 
-                if (bookAvailability === 1) {
+                if ( borrowStatus === 1 && bookAvailability === 1 ){
+                    console.log("else statement hit, the next line is the book obj arr \n" + bookObjArr)
 
+                    console.log("loop started")
+                    console.log(bookObjArr[i])
 
+                    libContainer.append(`
+
+                    <div class="uk-grid uk-flex-center" data-id = "${bookObjArr[i].id}" data-avail="false">
+                        <img src="${bookObjArr[i].imgUrl}" alt="imgUrl for ${bookObjArr[i].title}">
+                    <div class="uk-flex uk-flex-column uk-margin uk-width-1-4">
+                      <button class="uk-button uk-button-secondary returnButton" data-id = "${bookObjArr[i].id}" data-avail="false">Marked as Returned</button>
+                    </div>
+                    <div class="uk-width-1-3 uk-text-center uk-margin">
+                      <li ><strong> TITLE:</strong> ${bookObjArr[i].title}</li>
+                      <li ><strong> AUTHOR:</strong> ${bookObjArr[i].author}</li>
+                      <li ><strong> Genre:</strong> ${bookObjArr[i].genre}</li>
+                      <li ><strong> ISBN:</strong> ${bookObjArr[i].isbn}</li>
+                      <li ><span class="uk-label uk-label-warning">Borrowed By: ${bookObjArr[i].borrowerEmail} </span> </li>
+                    </div>
+                  
+                
+                
+                `)
+
+                }
+
+                else if (bookAvailability === 1) {
+
+                    console.log("if statement hit, the next line is the book obj arr \n" + bookObjArr)
+
+                    console.log("loop started")
+                    console.log(bookObjArr[i])
+                    console.log("bookavialability is set to \n \n \n  " + bookAvailability)
+                    console.log("borrow status is set to \n \n \n " + borrowStatus)
+
+                    libContainer.append(`
+                
+                <div class="uk-grid uk-flex-center" data-id = "${bookObjArr[i].id}" data-avail="true">
+                    <img src="${bookObjArr[i].imgUrl}" alt="imgUrl for ${bookObjArr[i].title}">
+                <div class="uk-flex uk-flex-column uk-margin uk-width-1-4">
+                    <button class="uk-button uk-button-primary AvailableButton" data-id = "${bookObjArr[i].id}" data-avail="true">Marked as Available</button>
+                </div>
+                <div class="uk-width-1-3 uk-text-center uk-margin">
+                    <li class="book_title"><strong> TITLE:</strong> ${bookObjArr[i].title}</li>
+                    <li class="author"><strong> AUTHOR:</strong> ${bookObjArr[i].author}</li>
+                    <li class="genre"><strong> Genre:</strong> ${bookObjArr[i].genre}</li>
+                    <li class="isbn"><strong> ISBN:</strong> ${bookObjArr[i].isbn}</li>
+                </div>
+                
+                
+                
+                `)
+                }
+                
+
+                else {
+
+                    console.log("else statement hit, the next line is the book obj arr \n" + bookObjArr)
 
                     console.log("loop started")
                     console.log(bookObjArr[i])
 
                     libContainer.append(`
                 
-                <div class="uk-grid uk-flex-center" data-id = "${bookObjArr[i].id}" data-avail="true">
-    <img src="${bookObjArr[i].imgUrl}" alt="imgUrl for ${bookObjArr[i].title}">
-    <div class="uk-flex uk-flex-column uk-margin">
-      <button class="uk-button uk-button-primary" id ="AvailableButton" >Marked as Available</button>
-    </div>
-    <div class="uk-width-auto uk-text-center uk-margin">
-      <li class="book_title"><strong> TITLE:</strong> ${bookObjArr[i].title}</li>
-      <li class="author"><strong> AUTHOR:</strong> ${bookObjArr[i].author}</li>
-      <li class="genre"><strong> Genre:</strong> ${bookObjArr[i].genre}</li>
-      <li class="isbn"><strong> ISBN:</strong> ${bookObjArr[i].isbn}</li>
-    </div>
-  </div>
-                
-                
-                `)
-                }
-
-                else{
-
-                    libContainer.append(`
-                
                     <div class="uk-grid uk-flex-center" data-id = "${bookObjArr[i].id}" data-avail="false">
-                    <img src="${bookObjArr[i].imgUrl}" alt="imgUrl for ${bookObjArr[i].title}">
-                    <div class="uk-flex uk-flex-column uk-margin">
-                      <button class="uk-button uk-button-danger" id ="AvailableButton" >Marked Unavailable</button>
+                      <img src="${bookObjArr[i].imgUrl}" alt="imgUrl for ${bookObjArr[i].title}">
+                    <div class="uk-flex uk-flex-column uk-margin uk-width-1-4">
+                      <button class="uk-button uk-button-danger AvailableButton" data-id = "${bookObjArr[i].id}" data-avail="false">Marked Unavailable</button>
                     </div>
-                    <div class="uk-width-auto uk-text-center uk-margin">
+                    <div class="uk-width-1-3 uk-text-center uk-margin">
                       <li class="book_title"><strong> TITLE:</strong> ${bookObjArr[i].title}</li>
                       <li class="author"><strong> AUTHOR:</strong> ${bookObjArr[i].author}</li>
                       <li class="genre"><strong> Genre:</strong> ${bookObjArr[i].genre}</li>
                       <li class="isbn"><strong> ISBN:</strong> ${bookObjArr[i].isbn}</li>
                     </div>
-                  </div>
+                  
                 
                 
                 `)
@@ -131,15 +167,22 @@ $(document).ready(function () {
          
         - this will be a post request to update the bool val available */
 
-    function changeBookAvailability(bookId,bookAvailability) {
+    function changeBookAvailability(bookId, bookAvailability) {
         console.log("changeBookAvail called")
+        console.log("the parameter bookAvailability is set to " + bookAvailability)
+
         //var bookId = "4"
         //var bookAvailability = "true"
-        var testObj = { availability: bookAvailability }
+
         //var bookId = $(this).attr("data-id")
         //bookAvailability = $(this).attr("data-availability")
 
-        if (bookAvailability === "true") {
+        if (bookAvailability === true) {
+            bookAvailability1 = "false"
+            var testObj = { availability: bookAvailability1 }
+            console.log(JSON.stringify(testObj))
+            console.log("calling bookUnavailable api route")
+            console.log("book Availability is set to " + bookAvailability)
 
             $.ajax("/api/bookUnavailable/" + bookId, {
                 type: "PUT",
@@ -154,6 +197,10 @@ $(document).ready(function () {
 
         }
         else {
+            bookAvailability1 = false
+            var testObj = { availability: bookAvailability1 }
+            console.log("calling book Available api route")
+            console.log("book Availability1 is set to " + bookAvailability1)
 
             $.ajax("/api/bookAvailable/" + bookId, {
                 type: "PUT",
@@ -169,6 +216,22 @@ $(document).ready(function () {
         }
 
     } // closes checkAvailability();
+
+
+    function markReturned(bookId, borrowedStatus){
+        var testObj = { borrowedStatus: "false" }
+        $.ajax("/api/returnBook/" + bookId, {
+            type: "PUT",
+            data: JSON.stringify(testObj),
+            dataType: 'json',
+            contentType: 'application/json'
+        }).then(function (response) {
+            console.log("changed bookAvailability state to", response);
+            // Reload the page to get the updated list
+            location.reload();
+        });
+
+    }
 
 
     /* 4. if one of the user's books are borrowed show the email of the person borrowing it
@@ -214,25 +277,65 @@ $(document).ready(function () {
 
 
 
-    $(document).on("click", $("#AvailableButton"), function(event){
-        
-        let availBtn = event.target
+    $(document).on("click", ".AvailableButton", function (event) {
+        event.preventDefault();
+
+        /*let availBtn = event.target
         let imgel = $(availBtn).parent().parent()
         let bookel = imgel[0]
         let bookId = $(bookel).attr("data-id")
         let bookAvailability = $(bookel).attr("data-avail")
         console.log(bookId)
-        console.log(bookAvailability)
+        console.log(bookAvailability)*/
         //console.log($(bookel).attr("data-id"))
-        changeBookAvailability(bookId,bookAvailability);
-        location.reload();
+        let test = $(this)
+        console.log(test)
+        let bookId = $(this).data("id");
+        let bookAvailability = $(this).data("avail");
+        changeBookAvailability(bookId, bookAvailability);
+        //location.reload();
+        //renderOwnedBooks();
 
-        
+
+
+    });
+
+
+    $(document).on("click", ".returnButton", function (event) {
+        event.preventDefault();
+
+        /*let availBtn = event.target
+        let imgel = $(availBtn).parent().parent()
+        let bookel = imgel[0]
+        let bookId = $(bookel).attr("data-id")
+        let bookAvailability = $(bookel).attr("data-avail")
+        console.log(bookId)
+        console.log(bookAvailability)*/
+        //console.log($(bookel).attr("data-id"))
+        let test = $(this)
+        console.log(test)
+        let bookId = $(this).data("id");
+        let borrowedStatus = $(this).data("avail");
+        //changeBookAvailability(bookId, bookAvailability);
+        console.log("clicked this button")
+        markReturned(bookId, borrowedStatus);
+        location.reload();
+        //renderOwnedBooks();
+
+
 
     });
 
 
 
+    /* $("button.AvailableButton").click(function(event){
+         let e = event
+         let c = $(e).children().children();
+         console.log("clicked")
+ 
+ 
+ 
+     });*/
 
 
 
