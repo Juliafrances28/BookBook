@@ -1,0 +1,105 @@
+
+/* Universal styling */
+* {
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+/* Applies to the whole page */
+html
+{
+  /* Green background Rich ! from Zo =) */
+  background-color: #2EB67D;
+}
+
+/* Registration Heading */
+h1
+{
+  color:white;
+  font-weight:800;
+  text-shadow: 2px 2px #E01E5A;
+  text-align: center;
+}
+
+/* Forces container to have white background like dancing book below Zo*/
+.uk-navbar-container
+{
+  background-color: white !important;
+}
+
+/* Dancing book gif */
+#dancing-book
+{
+  height:200px;
+}
+
+h2
+{
+  color:white;
+  font-weight:800;
+  text-shadow: 2px 2px #E01E5A;
+  text-align: center;
+}
+
+/* Sign up animation */
+.sign-up
+{
+  animation: glow 1s ease-in-out infinite alternate;
+  color: white;
+}
+
+.uk-input
+{
+  border-radius:10px;
+}
+
+h3 {
+  color: white;
+  text-align: center;
+  top: 50%;
+}
+
+.uk-container {
+  text-align: center;
+}
+
+#bookBtn 
+{
+  text-align: center;
+  border-radius:10px;
+  font-weight: 700;
+}
+
+#accountCreate
+{
+  color:white;
+  font-weight:700;
+}
+
+.bookImg 
+{
+  text-align: center;
+}
+
+footer 
+{
+  text-align: center;
+  color:white;
+  font-weight: 700;
+}
+
+
+
+  /* Glowing text swag Zo */
+
+  @keyframes glowing {
+    0% { box-shadow: 0 0 -10px white; }
+    60% { box-shadow: 0 0 20px white; }
+    80% { box-shadow: 0 0 20px white; }
+    100% { box-shadow: 0 0 -10px white; }
+  }
+
+  .button-glow 
+  {
+    animation: glowing 5000ms infinite;
+  }
