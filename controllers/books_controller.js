@@ -367,43 +367,24 @@ router.get("/books/available", function (req, res) {
 // API route to get logged in user's data
 router.get("/api/user_data", function (req, res) {
 
-    let user
+    let user;
     if (!req.user) {
-
-        console.log("retrieving test user")
+        console.log("retrieving test user");
         books.selectUser('id', 1, function (result) {
             console.log(result)
-
-        //console.log("retrieving test user")
-        books.selectUser('id', 1, function (result) {
-            //console.log(result)
-
             user = {
                 id: result[0].id,
                 first_name: result[0].first_name,
                 last_name: result[0].last_name,
                 email: result[0].email,
             }
-
             console.log("this is the test user \n " + JSON.stringify(user))
-
+            //console.log("this is the test user \n " + JSON.stringify(user))
             res.json({ user })
-        })
+        });
 
     }
     else {
-
-        books.selectUser('id', req.user.id, function (result) {
-            console.log(result)
-            console.log("this is the user info \n " + JSON.stringify(user))
-            user = {
-                id: result[0].id,
-                first_name: result[0].first_name,
-                last_name: result[0].last_name,
-                email: result[0].email,
-            }
-            res.json({ user })
-
         user = {
             id: req.user.id,
             first_name: req.user.first_name,
@@ -411,20 +392,24 @@ router.get("/api/user_data", function (req, res) {
             email: req.user.email,
         }
 
-        /* books.selectUser('id', req.user.id, function (result){
-             console.log(result)
-             console.log("this is the user info \n " + JSON.stringify(user))
-             user = {
-                 id : result[0].id,
-                 first_name: result[0].first_name,
-                 last_name: result[0].last_name,
-                 email: result[0].email,
-             }
-                
-         })*/
-        res.json({ user })
-        //console.log("sent Json with User info")
-    }
+        books.selectUser('id', req.user.id, function (result) {
+            books.selectUser('id', req.user.id, function (result){
+                 console.log(result)
+                 console.log("this is the user info \n " + JSON.stringify(user))
+                 user = {
+                     id : result[0].id,
+                     first_name: result[0].first_name,
+                     last_name: result[0].last_name,
+                     email: result[0].email,
+                 }
+                     res.json({user})
+             })
+             console.log("sent Json with User info")
+                    
+             })
+            res.json({ user });
+            //console.log("sent Json with User info")
+        }//Ends else statement
 
 })
 
@@ -467,7 +452,7 @@ router.put("/available/borrow/:id", function (req, res) {
 })
 
 
-});
+
 
 //When a book from the available list is borrowed, we want to insert the userId as the borrowed id
 router.put("/insert/:borrowerId/:bookId", function (req, res) {

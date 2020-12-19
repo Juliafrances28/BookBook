@@ -29,6 +29,7 @@ $(function () {
         //If the person presses the key it searches 
         $(searchBox).on("submit", function (event) {
             event.preventDefault();
+            // play();
             searchGBooks();
         });
  
@@ -77,10 +78,12 @@ $(function () {
  
         });
  
+
         //When "request to borrow" is clicked, look through books and find all available books
         $(document).on("click", ".requestToBorrow", function (event) {
-            event.preventDefault();
- 
+            event.stopImmediatePropagation();
+
+            console.log("test1");
             //Search through the books table, find all available books of that isbn number
             let isbn = $(this).data("isbn13");
  
@@ -198,6 +201,7 @@ $(function () {
                 }
             });
         }
+
         //Function to add to wishlist if the book is not available
         function addToWishList(isbn, userId) {
  
@@ -221,18 +225,16 @@ $(function () {
                     contentType: 'application/json'
                 }).then(function () {
                     //Need to alert user that the item isn't available and that item is added to wishList
-                    wishListAlert(isbn);
+                    wishListAlert();
                 });
             })
             //Need to alert user that the item isn't available
         }
  
         //Alerts the user that the book isn't available and that it is added to their wishlist
-        function wishListAlert(isbn) {
-            console.log(isbn);
- 
+        function wishListAlert() {
             let alertEl = $(`<div class="avail-alert">`);
-            alertEl.html("This book is not currently available. It is being added to your library.");
+            alertEl.html("This book is not currently available. It is being added to your wishlist.");
             $("#searchForm").append(alertEl);
         }
  
@@ -274,19 +276,18 @@ $(function () {
 })
  
 
-// Zo's login page javascript 
-function play() 
-// Juli/David/or Rich code this so when the user hit enter key in search for home page it works.
-{
-    var sound = document.getElementById("book-audio-search");
-    sound.play();
-}
+// // Zo's login page javascript 
+// function play() {
+//     console.log("test");
+//     let sound = document.getElementById("searchForm");
+//     sound.play();
+// }
 
-// Julia/David/Rich code this so onclick this will play for the buttons thanks
-function play() 
-{
-    var sound = document.getElementById("audio-mouse-click");
-    sound.play();
-}
+// // Julia/David/Rich code this so onclick this will play for the buttons thanks
+// function play() 
+// {
+//     var sound = document.getElementById("audio-mouse-click");
+//     sound.play();
+// }
  
 
