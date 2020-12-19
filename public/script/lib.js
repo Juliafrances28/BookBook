@@ -10,15 +10,14 @@ $(document).ready(function () {
 
     /* 
     
-    1. ajax call for user id - store in a variable for use later
+    1. ajax call for user id - store in a variable for use later - DONE
     
     
     
     3. make request to borrow if not available add to wish list
      - get request to check availability, if not available then post request to add to wish list table
     
-    4. if one of the user's books are borrowed show the email of the person borrowing it
-     -  get request to check if borrowed, if true dynamically add an icon to suggest it's borrowed, if false hide then hide the button for returning
+   
     
     5. mark it as returned
     - post request to update availability and hide the button for returning
@@ -47,7 +46,7 @@ $(document).ready(function () {
         }
 
         renderOwnedBooks();
-        changeBookAvailability();
+        //changeBookAvailability();
 
     });// closes user info request
 
@@ -116,7 +115,43 @@ $(document).ready(function () {
 
     }
 
-    }
+    } // closes checkAvailability();
+
+
+    /* 4. if one of the user's books are borrowed show the email of the person borrowing it
+     -  get request to check if borrowed, if true dynamically add an icon to suggest it's borrowed, if false hide then hide the button for returning */
+
+     function isBorrowed(){
+        $.ajax("/api/bookIdWhereBorrowed/:id" + userInfo.id, {
+            type: "GET"
+        }).then(function (data) {
+            let bookObjArr = data
+
+            for (i = 0; i < bookObjArr.length; i++) {
+                console.log("loop started")
+                console.log(bookObjArr[i])
+            }
+
+            $.ajax("/api/bookByOwnerId/:id" + userInfo.id, {
+                type: "GET"
+            }).then(function (data) {
+                let bookObjArr = data
+    
+                for (i = 0; i < bookObjArr.length; i++) {
+                    console.log("loop started")
+                    console.log(bookObjArr[i])
+                }
+    
+    
+    
+    
+            });// closes get books by id ajax call
+
+
+        });// closes get books by id ajax call
+
+
+     }// closes isBorrowed();
 
 
 
