@@ -73,27 +73,31 @@ router.get("/login", function (req, res) {
     console.log("heres login!")
     res.sendFile(path.join(__dirname, "../public/html/login.html"));
     // console.log(req.session.passport)
-    console.log(req.user, "line72 controller")
+    console.log(req.user, "line76 controller")
+})
+router.get("/logout", function (req, res) {
+    req.logOut();
+    res.redirect("/login");
+    // res.sendFile(path.join(__dirname, "../public/html/login.html"));
+    // console.log(req.session.passport)
+
 })
 
 router.post("/login", passport.authenticate("local", {
-    failureRedirect: "/",
-    successRedirect: "/home",
-    failureFlash: true,
-    message: "test"
 }), function (req, res) {
     console.log("test")
-    //  res.json(req.user)
+    res.json({ user: req.user, path: '/home' })
     // res.send(req.user)
 
 })
 
 
 
-router.get("/home", function (req, res) {
+router.get("/home", isUser, function (req, res) {
     //after authenticate that happends in the post login route, the redirect to /home makes req.user available
     res.sendFile(path.join(__dirname, "../public/html/homepage.html"));
     console.log("Made it to home page!")
+    console.log(req.user, "line97")
 })
 
 // router.get("/home", isUser, function (req, res) {
@@ -386,30 +390,30 @@ router.get("/api/user_data", function (req, res) {
     }
     else {
         user = {
-            id: req.user.id,
+            id: req.user[0].id,
             first_name: req.user.first_name,
             last_name: req.user.last_name,
             email: req.user.email,
         }
 
-        books.selectUser('id', req.user.id, function (result) {
-            books.selectUser('id', req.user.id, function (result){
-                 console.log(result)
-                 console.log("this is the user info \n " + JSON.stringify(user))
-                 user = {
-                     id : result[0].id,
-                     first_name: result[0].first_name,
-                     last_name: result[0].last_name,
-                     email: result[0].email,
-                 }
-                     res.json({user})
-             })
-             console.log("sent Json with User info")
-                    
-             })
-            res.json({ user });
-            //console.log("sent Json with User info")
-        }//Ends else statement
+        // books.selectUser('id', req.user[0].id, function (result) {
+        books.selectUser('id', req.user[0].id, function (result) {
+            console.log(result)
+            console.log("this is the user info \n " + JSON.stringify(user))
+            user = {
+                id: result[0].id,
+                first_name: result[0].first_name,
+                last_name: result[0].last_name,
+                email: result[0].email,
+            }
+            res.json({ user })
+        })
+        console.log("sent Json with User info")
+
+        // })
+        // res.json({ user });
+        //console.log("sent Json with User info")
+    }//Ends else statement
 
 })
 
