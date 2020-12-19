@@ -1,7 +1,5 @@
 /* Homepage CSS Zo*/
 
-
-
 html
 {
     /* Slack green - Rich idea Zo */
@@ -123,7 +121,19 @@ button
     width:100px;
 }
 
+/* Available to borrow */
+.available-borrow
+{
 
+    background-color: #431C69
+}
+
+/* Alert styling */
+.avail-alert
+{
+    background-color:  #E01E5A;
+    font-weight: 600;
+}
   
 /* Glowing text swag Zo */
 @keyframes glow {
