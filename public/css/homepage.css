@@ -125,7 +125,8 @@ button
 .available-borrow
 {
 
-    background-color: #431C69
+    background-color: #431C69;
+    color:white;
 }
 
 /* Alert styling */
