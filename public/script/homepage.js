@@ -7,17 +7,6 @@ $(function () {
         let userEmail = data.user.email;
  
  
-        //When user clicks "Book inventory" they are redirected to the library
-        $(document).on("click", ".inventory", function (result) {
-            console.log("test");
-            window.location.replace("../library/");
-        });
- 
-        //When user clicks "Sign out" they are redirected to the sign up page
-        $(document).on("click", ".sign-out", function (result) {
-            window.location.replace("../login/");
-        });
- 
         //We want the span to populate with the user's first name
         let nameSpan = $(".firstName");
         nameSpan.empty();
