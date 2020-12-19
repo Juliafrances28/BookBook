@@ -142,21 +142,23 @@ router.get("/api/bookByOwnerId/:id", function (req, res) {
 router.put("/api/bookUnavailable/:bookId", function (req, res) {
     //change availability from true to false
     //change checkedout from false to true
+    console.log("the data in the request object is \n \n \n \n \n \n \n " + JSON.stringify(req))
 
 
-    let condition = "id = " + req.params.bookId;
+    var condition = "id = " + req.params.bookId;
     //console.log("the condition is " + condition)
 
     books.updateOne({
         available: false
     }, condition, function (result) {
+        condition = condition
         if (result.changedRows == 0) {
             return res.status(404).end();
         } else {
             let id = req.params.bookId;
             console.log("\n \n \n \n \n " + id + "\n \n \n ")
-            books.selectWhere("id", 1, function (data) {
-                //console.log("the data in book from the update request is \n \n \n  " + JSON.stringify(data))
+            books.selectWhere("id", id, function (data) {
+                console.log("the data in book from the update request is \n \n \n  " + JSON.stringify(data))
                 return res.json(data)
 
             })
@@ -180,13 +182,14 @@ router.put("/api/bookAvailable/:bookId", function (req, res) {
     books.updateOne({
         available: true
     }, condition, function (result) {
+        condition = condition
         if (result.changedRows == 0) {
             return res.status(404).end();
         } else {
             let id = req.params.bookId;
             console.log("\n \n \n \n \n " + id + "\n \n \n ")
-            books.selectWhere("id", 1, function (data) {
-                //console.log("the data in book from the update request is \n \n \n  " + JSON.stringify(data))
+            books.selectWhere("id", id, function (data) {
+                console.log("the data in book from the update request is \n \n \n  " + JSON.stringify(data))
                 return res.json(data)
 
             })
@@ -489,6 +492,17 @@ router.put("/insertemail/:borrowerEmail/:bookId", function (req, res) {
         }
     });
 })
+
+
+//Gets entry from books where id = id AND borrowed = true
+router.get("/api/bookIdWhereBorrowed/:id", function (req, res) {
+    let id = req.params.id;
+    books.selectWhereTwo("id", id, "borrowed", "true", function (data) {
+        console.log("data is " + data)
+        res.json(data);
+    })
+});
+
 
 // Export routes for server.js to use.
 module.exports = router;
