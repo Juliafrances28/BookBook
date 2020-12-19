@@ -84,7 +84,8 @@ footer
     100% { box-shadow: 0 0 -10px white; }
   }
   
-  .button-glow {
+  .button-glow 
+  {
     animation: glowing 5000ms infinite;
   }
   
