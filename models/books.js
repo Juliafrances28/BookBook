@@ -23,8 +23,18 @@ const books = {
             cb(res);
         })
     },
+    insertOneWish: function (cols, vals, cb) {
+        orm.insertOne("wishlist", cols, vals, function (res) {
+            cb(res);
+        })
+    },
     updateOne: function (objColVals, condition, cb) {
         orm.updateOne("books", objColVals, condition, function (res) {
+            cb(res);
+        })
+    },
+        updateOneWhere: function(objColVals, condition1, condition2, condition3, cb){
+        orm.updateOneWhere("books", objColVals, condition1, condition2, condition3, function(res){
             cb(res);
         })
     },
@@ -35,9 +45,20 @@ const books = {
     },
     //Needed to create this function to add user to the users table of the database
     createUser: function (cols, vals, cb) {
-        orm.create("users", cols, vals, function (res) {
+        orm.createUser("users", cols, vals, function (res) {
             cb(res);
         });
+    },
+    selectUser: function (cols, vals, cb) {
+        orm.selectWhere("users", cols, vals, function (res) {
+            cb(res);
+
+        });
+    },
+    selectWhereTwo: function (col1, val1, col2, val2, cb) {
+        orm.selectWhereTwo("books", col1, val1, col2, val2, function (res) {
+            cb(res);
+        })
     }
 }
 // Export the database functions for the controller (catsController.js).

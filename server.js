@@ -1,10 +1,14 @@
 var express = require("express");
+var session = require('express-session');
+var passport = require("./config/passport")
 
 // Set the port of our application
 // process.env.PORT lets the port be set by Heroku
 var PORT = process.env.PORT || 3000;
 
 var app = express();
+var flash = require('express-flash');
+
 
 //These are needed for the environmental variables needed for the books API
 //const dotenv = require('dotenv');
@@ -20,6 +24,16 @@ app.use(express.static("public"));
 // Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(session({
+  secret: "password",
+  resave: true,
+  saveUninitialized: true,
+  cookie: { _expires: 3600000 }
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
+
 
 // Import routes and give the server access to them.
 var routes = require("./controllers/books_controller.js");
