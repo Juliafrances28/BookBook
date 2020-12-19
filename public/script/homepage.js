@@ -225,9 +225,20 @@ $(function () {
             let alertEl = $(`<div class="avail-alert">`);
             alertEl.html("This book is not currently available. It is being added to your wishlist.");
             $("#searchForm").append(alertEl);
+
+            //We want the alert to disappear in the event of the user hitting the enter key
+            timeFunction();
+
+            function timeFunction(){
+                setTimeout(function(){
+                    let alertElDel = $(".avail-alert");
+                    alertElDel.empty();
+                }, 5000);
+            }
         }
  
         function searchGBooks() {
+
             //Need to save what the user searches
             let searchInput = $(".uk-search-input");
  
