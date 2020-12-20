@@ -281,7 +281,7 @@ router.delete("/api/:bookId/delete", function (req, res) {
         }
     });
 });
- 
+
 //We want to add an item to the wishlist
 router.post("/wishlist", function (req, res) {
     books.insertOneWish([
@@ -541,8 +541,33 @@ router.put("/api/returnBook/:id", function (req, res) {
     });
 })
  
+ //User can delete a book from their wishlist
+router.delete("/api/:isbn/removeWishlistitem", function (req, res) {
+    let isbn =  req.params.isbn;
+    let userId = req.user[0].id
+    let condition = `isbn =  ${isbn} AND userId = ${userId}`
+
  
+    books.deleteOneWishlist(condition, function (result) {
+        if (result.affectedRows == 0) {
+            // If no rows were changed, then the ID must not exist, so 404
+            return res.status(404).end();
+        } else {
+            res.status(200).end();
+        }
+    });
+});
  
+
+//Gets books from wishlist
+router.get("/api/WishlistByUserId/:id", function (req, res) {
+    let id = req.params.id;
+    //id = 1
+    books.selectWhereWishlist("userId", id, function (data) {
+        // console.log("owned books: " + data )
+        res.json(data);
+    })
+});
  
 // Export routes for server.js to use.
 module.exports = router;
