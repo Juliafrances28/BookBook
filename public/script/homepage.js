@@ -102,7 +102,7 @@ $(function () {
         //A list of available books will populate 
         let availableEl = $(".available-book");
 
-        $.ajax("/books/available", {
+        $.ajax(`/books/available/${userId}`, {
             type: "GET"
         }).then(function (data) {
             if (!data) {
