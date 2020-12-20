@@ -44,6 +44,7 @@ CREATE TABLE wishlist (
     author varchar(50),
     genre varchar(50),
     isbn varchar(50),
+    imgUrl text DEFAULT NULL,
     CONSTRAINT FK_WishList_UserId FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
     Primary Key (id)
 );
