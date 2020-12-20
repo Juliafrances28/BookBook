@@ -104,6 +104,30 @@ const orm = {
             cb(result);
         });
     },
+    //Limit the number of updated ones to a certain number
+    updateOneLimit: function (table, objColVals, limit, condition1, condition2, condition3, cb) {
+        let queryString = "UPDATE " + table;
+
+        queryString += " SET ";
+        queryString += objToSql(objColVals);
+        queryString += " WHERE ";
+        queryString += condition1;
+        queryString += " AND ";
+        queryString += condition2;
+        queryString += " AND ";
+        queryString += condition3;
+        queryString +=" LIMIT ";
+        queryString += limit +";"
+
+        console.log(queryString);
+        connection.query(queryString, function (err, result) {
+            if (err) {
+                throw err;
+            }
+
+            cb(result);
+        });
+    },
     updateOneWhere: function (table, objColVals, condition1, condition2, condition3, cb) {
         let queryString = "UPDATE " + table;
 

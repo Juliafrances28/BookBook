@@ -327,37 +327,45 @@ router.post("/library/new/", function (req, res) {
 
 //When "request to borrow" is clicked, we check for the ISBN # in the "books" table WHERE available = true
 router.put("/borrow/:isbn", function (req, res) {
-    //First need to set available=false  where isbn=value and checkedOut = false
-    //THEN set checkedOut = true where isbn = value
+    //We want to set borrowed=true for ONE entry where available=true AND borrowed=false
     let isbn2 = req.params.isbn;
 
     let condition1 = "isbn =" + isbn2;
-    let condition2 = "available = true";
+    let condition2 = "available=true";
     let condition3 = "borrowed=false";
-
-    //First set available equal to false
-    books.updateOneWhere({
-        available: false
-    }, condition1, condition2, condition3, function (result) {
+    books.updateOneLimit({
+        borrowed:true
+    }, condition1, condition2, condition3, function(result){
         if (result.changedRows == 0) {
             return res.status(400).end();
         } else {
-            changeSecondOne();
+            res.json({ isbn: isbn2 });
         }
     });
 
-    //Change borrowed to be true
-    function changeSecondOne() {
-        books.updateOne({
-            borrowed: true
-        }, condition1, function (result) {
-            if (result.changedRows == 0) {
-                return res.status(400).end();
-            } else {
-                res.json({ isbn: isbn2 });
-            }
-        })
-    }
+    // //First set available equal to false
+    // books.updateOneWhere({
+    //     available: false
+    // }, condition1, condition2, condition3, function (result) {
+    //     if (result.changedRows == 0) {
+    //         return res.status(400).end();
+    //     } else {
+    //         changeSecondOne();
+    //     }
+    // });
+
+    // //Change borrowed to be true
+    // function changeSecondOne() {
+    //     books.updateOne({
+    //         borrowed: true
+    //     }, condition1, function (result) {
+    //         if (result.changedRows == 0) {
+    //             return res.status(400).end();
+    //         } else {
+    //             res.json({ isbn: isbn2 });
+    //         }
+    //     })
+    // }
 
 });
 

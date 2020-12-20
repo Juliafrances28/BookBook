@@ -33,8 +33,13 @@ const books = {
             cb(res);
         })
     },
-        updateOneWhere: function(objColVals, condition1, condition2, condition3, cb){
-        orm.updateOneWhere("books", objColVals, condition1, condition2, condition3, function(res){
+    updateOneLimit: function(objColVals, condition1, condition2, condition3, cb){
+        orm.updateOneLimit("books", objColVals, 1, condition1, condition2, condition3,  function(res){
+            cb(res);
+        })
+    },
+    updateOneWhere: function (objColVals, condition1, condition2, condition3, cb) {
+        orm.updateOneWhere("books", objColVals, condition1, condition2, condition3, function (res) {
             cb(res);
         })
     },
