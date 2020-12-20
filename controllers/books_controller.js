@@ -133,8 +133,8 @@ router.get("/api/bookById/:id", function (req, res) {
 
 //Gets entry from table from book by ownerId
 router.get("/api/bookByOwnerId/:id", function (req, res) {
-    //let id = req.user.id;
-    id = 1
+    let id = req.params.id;
+    //id = 1
     books.selectWhere("ownerId", id, function (data) {
         // console.log("owned books: " + data )
         res.json(data);
@@ -390,23 +390,25 @@ router.get("/api/user_data", function (req, res) {
 
     }
     else {
-        user = {
-            id: req.user[0].id,
-            first_name: req.user.first_name,
-            last_name: req.user.last_name,
-            email: req.user.email,
-        }
+        // user = {
+        //     id: req.user[0].id,
+        //     first_name: req.user.first_name,
+        //     last_name: req.user.last_name,
+        //     email: req.user.email,
+        // }
 
         // books.selectUser('id', req.user[0].id, function (result) {
         books.selectUser('id', req.user[0].id, function (result) {
             console.log(result)
-            console.log("this is the user info \n " + JSON.stringify(user))
+            
             user = {
                 id: result[0].id,
                 first_name: result[0].first_name,
                 last_name: result[0].last_name,
                 email: result[0].email,
             }
+
+            console.log("this is the user info \n " + JSON.stringify(user))
             res.json({ user })
         })
         console.log("sent Json with User info")

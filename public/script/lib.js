@@ -35,10 +35,28 @@ $(document).ready(function () {
         
         1. ajax call for user id - store in a variable for use later - DONE*/
 
-    // immediately make ajax call to save user info into an object for later use.
-    $.ajax('/api/user_data', {
-        type: "GET"
-    }).then(function (response) {
+    //promisified the ajax call to be able to run requestUserInfo afterwards
+    function requestUserInfo() {
+
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: '/api/user_data',
+                type: "GET",
+                success: function (data) {
+                    resolve(data)
+                },
+                error: function (error) {
+                    reject(error)
+                }
+            })
+
+        })
+
+    }// closes user info request function (new)
+
+
+// CALLED REQUEST USER INFO THEN SAVE THE RESPONSE INTO AN OBJECT AND PASS THAT OBJECT AS A PARAMETER TO RENDER OWNED BOOKS
+    requestUserInfo().then((response) => {
         console.log(response)
         userInfo = {
             id: response.user.id,
@@ -46,28 +64,52 @@ $(document).ready(function () {
             last_name: response.user.last_name,
             email: response.user.email,
         }
+        renderOwnedBooks(userInfo);
+    })
 
-        renderOwnedBooks();
-        //changeBookAvailability();
+
+    /*
+    $.ajax('/api/user_data', {
+        type: "GET"
+    }).then(function (response) {
+        console.log(response)
+        
+        console.log(JSON.stringify(userInfo))
+
+       
+
+        //renderOwnedBooks(userInfo);
+
+
+
+
+    }).catch((err) => {
+        console.error(err)
 
     });// closes user info request
+    */
+
+
 
 
     //////BEGIN FUNCTION DEFINITIONS
 
-    function renderOwnedBooks() {
+    function renderOwnedBooks(userInfo) {
         console.log("called renderOwnedBooks")
-        $.ajax("/api/bookByOwnerId/:id" + userInfo.id, {
+        console.log("The data in user info is \n \n \n \n " + JSON.stringify(userInfo))
+        $.ajax("/api/bookByOwnerId/" + userInfo.id, {
             type: "GET"
         }).then(function (data) {
+            console.log("the response from renderOwned books is " + JSON.stringify(data))
+
             let bookObjArr = data
 
             for (i = 0; i < bookObjArr.length; i++) {
                 let bookAvailability = bookObjArr[i].available
                 let borrowStatus = bookObjArr[i].borrowed
 
-                if ( borrowStatus === 1 && bookAvailability === 1 ){
-                    console.log("else statement hit, the next line is the book obj arr \n" + bookObjArr)
+                if (borrowStatus === 1 && bookAvailability === 1) {
+                    console.log("else statement hit, the next line is the book obj arr \n" + JSON.stringify(bookObjArr))
 
                     console.log("loop started")
                     console.log(bookObjArr[i])
@@ -123,7 +165,7 @@ $(document).ready(function () {
                 
                 `)
                 }
-                
+
 
                 else {
 
@@ -222,7 +264,7 @@ $(document).ready(function () {
     } // closes checkAvailability();
 
 
-    function markReturned(bookId, borrowedStatus){
+    function markReturned(bookId, borrowedStatus) {
         var testObj = { borrowedStatus: "false" }
         $.ajax("/api/returnBook/" + bookId, {
             type: "PUT",
