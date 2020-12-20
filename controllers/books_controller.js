@@ -342,31 +342,9 @@ router.put("/borrow/:isbn", function (req, res) {
             res.json({ isbn: isbn2 });
         }
     });
- 
-    // //First set available equal to false
-    // books.updateOneWhere({
-    //     available: false
-    // }, condition1, condition2, condition3, function (result) {
-    //     if (result.changedRows == 0) {
-    //         return res.status(400).end();
-    //     } else {
-    //         changeSecondOne();
-    //     }
-    // });
- 
-    // //Change borrowed to be true
-    // function changeSecondOne() {
-    //     books.updateOne({
-    //         borrowed: true
-    //     }, condition1, function (result) {
-    //         if (result.changedRows == 0) {
-    //             return res.status(400).end();
-    //         } else {
-    //             res.json({ isbn: isbn2 });
-    //         }
-    //     })
-    // }
- 
+
+
+
 });
  
 //We want to be able to get all of the books that are available - maybe we should limit the number of responses?
