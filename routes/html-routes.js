@@ -20,10 +20,15 @@ module.exports = function (app) {
         res.sendFile(path.join(__dirname, "../public/html/registration.html"));
         console.log("routes")
     });
-  
+
+    // Able to get the login page
+    app.get("/registration", function (req, res) {
+        res.sendFile(path.join(__dirname, "../public/html/login.html"));
+        console.log("routes")
+    });
 
 
 
 
-    
+
 };
