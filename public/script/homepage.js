@@ -112,13 +112,7 @@ $(function () {
             //For right now take the first five elements of the index
             availableEl.empty();
 
-            let numberBooks = 0;
-            if (data.length < 6) {
-                numberBooks = data.length;
-            }
-            else {
-                numberBooks = 5;
-            }
+            let numberBooks = data.length;
 
             for (let i = 0; i < numberBooks; i++) {
                 let bookTitle = data[i].title;
@@ -196,19 +190,23 @@ $(function () {
             $.get("/gbooks/" + isbn, function (data) {
                 let item = data.items[0];
                 let author = item.volumeInfo.authors[0];
+                let genre = item.volumeInfo.categories[0];
                 let title = item.volumeInfo.title;
+                let imgThum = item.volumeInfo.imageLinks.thumbnail;
 
                 let wishListEntry = {
                     userId: userId,
                     title: title,
                     author: author,
-                    isbn: isbn
+                    genre: genre,
+                    isbn: isbn,
+                    imgUrl: imgThum
                 }
 
 
-                $.post("/wishlist", {
+                $.ajax("/wishlist", {
                     type: "POST",
-                    data: wishListEntry,
+                    data: JSON.stringify(wishListEntry),
                     dataType: 'json',
                     contentType: 'application/json'
                 }).then(function () {

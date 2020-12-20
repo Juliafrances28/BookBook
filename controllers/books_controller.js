@@ -285,13 +285,15 @@ router.delete("/api/:bookId/delete", function (req, res) {
 //We want to add an item to the wishlist
 router.post("/wishlist", function (req, res) {
     books.insertOneWish([
-        "userId", "title", "author", "isbn"
+        "userId", "title", "author", "genre", "isbn", "imgUrl"
     ], [
-        req.body.data.userId, req.body.data.title, req.body.data.author, req.body.data.isbn
+        req.body.userId, req.body.title, req.body.author, req.body.genre, req.body.isbn, req.body.imgUrl
     ], function (result) {
         res.json(result);
-    })
+    });
 })
+
+
 //Google Books
  
 //When the user gives a search entry, we return the JSON from google books - get request
