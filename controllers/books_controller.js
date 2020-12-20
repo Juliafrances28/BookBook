@@ -347,11 +347,21 @@ router.put("/borrow/:isbn", function (req, res) {
 
 });
  
-//We want to be able to get all of the books that are available - maybe we should limit the number of responses?
-router.get("/books/available", function (req, res) {
-    books.selectWhere("available", 1, function (data) {
+//We want to be able to get all of the books that are available 
+router.get("/books/available/:ownerId", function (req, res) {
+    //Need to change this to be select where available = true AND borrowed = false AND ownerId = user's owner ID
+   let ownerId = req.params.ownerId;
+
+    books.selectWhereNot("available", "TRUE", "borrowed", "FALSE", "ownerId", ownerId, "5", function(data){
+        console.log("test");
         res.json(data);
     });
+
+    // books.selectWhereTwo("id", id, "borrowed", "true", function (data) {
+    //     console.log("data is " + data)
+    //     res.json(data);
+    // })
+
 })
  
  

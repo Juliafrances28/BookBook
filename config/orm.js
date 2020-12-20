@@ -203,6 +203,17 @@ const orm = {
             cb(result)
         })
  
+    },
+    //Make path for two conditions, plus one not condition, and a limit
+    selectWhereNot: function(table, col1, val1, col2, val2, col3, val3, limit, cb){
+        let queryString = `SELECT*FROM ${table} WHERE ${col1}=${val1} AND ${col2}=${val2} AND ${col3}!=${val3} LIMIT ${limit};`;
+        connection.query(queryString, function (err, result) {
+            console.log(queryString);
+            if (err) {
+                throw err;
+            }
+            cb(result);
+        });
     }
 }
 // Export the orm object for the model (cat.js).
