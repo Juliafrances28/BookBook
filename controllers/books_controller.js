@@ -207,64 +207,39 @@ router.put("/api/bookAvailable/:bookId", function (req, res) {
  
 //User can mark a book as borrowed
 router.put("/api/borrow/:bookId", function (req, res) {
-    //change availability from true to false
     //change checkedout from false to true
  
     let condition = "id = " + req.params.bookId;
  
     books.updateOne({
-        available: false
+        borrowed: true
     }, condition, function (result) {
         if (result.changedRows == 0) {
             return res.status(404).end();
         } else {
-            changeSecondOne();
+            res.json({ id: req.params.id });
         }
     });
  
-    function changeSecondOne() {
-        books.updateOne({
-            checkedOut: true
-        }, condition, function (result) {
-            if (result.changedRows == 0) {
-                return res.status(404).end();
-            } else {
-                changeSecondOne();
-                res.json({ id: req.params.id });
-            }
-        });
-    }
+
 });
  
 //Can mark a book as returned
 router.put("/api/:bookId/return", function (req, res) {
-    //change availability from false to true
     //change checkedout from true to false
  
     let condition = "id = " + req.params.bookId;
  
     books.updateOne({
-        available: true
+        borrowed: false
     }, condition, function (result) {
         if (result.changedRows == 0) {
             return res.status(404).end();
         } else {
-            changeSecondOne();
+            res.json({ id: req.params.id });
         }
     });
  
-    function changeSecondOne() {
-        books.updateOne({
-            checkedOut: false
-        }, condition, function (result) {
-            if (result.changedRows == 0) {
-                return res.status(404).end();
-            } else {
-                changeSecondOne();
-                res.json({ id: req.params.id });
-            }
-        });
-    }
  
 });
  
@@ -356,11 +331,6 @@ router.get("/books/available/:ownerId", function (req, res) {
         console.log("test");
         res.json(data);
     });
-
-    // books.selectWhereTwo("id", id, "borrowed", "true", function (data) {
-    //     console.log("data is " + data)
-    //     res.json(data);
-    // })
 
 })
  
