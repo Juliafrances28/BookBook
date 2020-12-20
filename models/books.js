@@ -48,6 +48,11 @@ const books = {
             cb(res);
         })
     },
+    deleteOneWishlist: function (condition, cb) {
+        orm.deleteOne("wishlist", condition, function (res) {
+            cb(res);
+        })
+    },
     //Needed to create this function to add user to the users table of the database
     createUser: function (cols, vals, cb) {
         orm.createUser("users", cols, vals, function (res) {
@@ -67,6 +72,11 @@ const books = {
     },
     selectWhereNot: function (col1, val1, col2, val2, col3, val3, limit, cb) {
         orm.selectWhereNot("books", col1, val1, col2, val2, col3, val3, limit, function (res) {
+            cb(res);
+        })
+    },
+    selectWhereWishlist: function (col, vals, cb) {
+        orm.selectWhere("wishlist", col, vals, function (res) {
             cb(res);
         })
     }
