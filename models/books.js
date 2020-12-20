@@ -1,6 +1,6 @@
 // Import the ORM to create functions that will interact with the database.
 var orm = require("../config/orm.js");
-
+ 
 const books = {
     //Will fill in based on group discussion 
     selectAll: function (cb) {
@@ -33,8 +33,13 @@ const books = {
             cb(res);
         })
     },
-        updateOneWhere: function(objColVals, condition1, condition2, condition3, cb){
-        orm.updateOneWhere("books", objColVals, condition1, condition2, condition3, function(res){
+    updateOneLimit: function(objColVals, condition1, condition2, condition3, cb){
+        orm.updateOneLimit("books", objColVals, 1, condition1, condition2, condition3,  function(res){
+            cb(res);
+        })
+    },
+    updateOneWhere: function (objColVals, condition1, condition2, condition3, cb) {
+        orm.updateOneWhere("books", objColVals, condition1, condition2, condition3, function (res) {
             cb(res);
         })
     },
@@ -52,7 +57,7 @@ const books = {
     selectUser: function (cols, vals, cb) {
         orm.selectWhere("users", cols, vals, function (res) {
             cb(res);
-
+ 
         });
     },
     selectWhereTwo: function (col1, val1, col2, val2, cb) {
@@ -63,3 +68,5 @@ const books = {
 }
 // Export the database functions for the controller (catsController.js).
 module.exports = books;
+ 
+
