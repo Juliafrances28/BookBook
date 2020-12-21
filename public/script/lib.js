@@ -7,6 +7,7 @@ $(document).ready(function () {
     const book = $(".book")
     const libContainer = $("#libContainer")
     const wishListContainer = $("#wishListContainer")
+    const borrowedContainer = $("#borrowedContainer")
 
 
 
@@ -66,6 +67,8 @@ $(document).ready(function () {
             email: response.user.email,
         }
         renderOwnedBooks(userInfo);
+        renderWishList(userInfo);
+        renderBorrowed(userInfo);
     })
 
 
@@ -223,79 +226,20 @@ $(document).ready(function () {
                 let bookAvailability = bookObjArr[i].available
                 let borrowStatus = bookObjArr[i].borrowed
 
-                if (borrowStatus === 1 && bookAvailability === 1) {
-                    console.log("else statement hit, the next line is the book obj arr \n" + JSON.stringify(bookObjArr))
-
-                    console.log("loop started")
-                    console.log(bookObjArr[i])
-
-                    wishListContainer.append(`
-
-                    <div class="uk-grid uk-flex-center" data-id = "${bookObjArr[i].id}" data-avail="false">
-                        <img src="${bookObjArr[i].imgUrl}" alt="imgUrl for ${bookObjArr[i].title}">
-                    <div class="uk-flex uk-flex-column uk-margin uk-width-1-4">
-                      <button class="uk-button uk-button-secondary returnButton" data-id = "${bookObjArr[i].id}" data-avail="false">Marked as Returned</button>
-                      <button class="uk-button uk-button-primary deleteBtn libDelete" data-id = "${bookObjArr[i].id}" data-delete = "library" data-isbn="${bookObjArr[i].isbn}">Delete from Library</button>
-                    </div>
-                    <div class="uk-width-1-3 uk-text-center uk-margin">
-                      <li ><strong> TITLE:</strong> ${bookObjArr[i].title}</li>
-                      <li ><strong> AUTHOR:</strong> ${bookObjArr[i].author}</li>
-                      <li ><strong> Genre:</strong> ${bookObjArr[i].genre}</li>
-                      <li ><strong> ISBN:</strong> ${bookObjArr[i].isbn}</li>
-                      <li ><span class="uk-label uk-label-warning">Borrowed By: ${bookObjArr[i].borrowerEmail} </span> </li>
-                    </div>
-                  
-                
-                
-                `)
-
-                }
-
-                else if (bookAvailability === 1) {
-
-                    console.log("if statement hit, the next line is the book obj arr \n" + bookObjArr)
-
-                    console.log("loop started")
-                    console.log(bookObjArr[i])
-                    console.log("bookavialability is set to \n \n \n  " + bookAvailability)
-                    console.log("borrow status is set to \n \n \n " + borrowStatus)
-
-                    wishListContainer.append(`
-                
-                <div class="uk-grid uk-flex-center" data-id = "${bookObjArr[i].id}" data-avail="true">
-                    <img src="${bookObjArr[i].imgUrl}" alt="imgUrl for ${bookObjArr[i].title}">
-                <div class="uk-flex uk-flex-column uk-margin uk-width-1-4">
-                    <button class="uk-button uk-button-primary AvailableButton" data-id = "${bookObjArr[i].id}" data-avail="true">Marked as Available</button>
-                    <button class="uk-button uk-button-primary deleteBtn libDelete" data-id = "${bookObjArr[i].id}" data-delete = "library" data-isbn="${bookObjArr[i].isbn}" >Delete from Library</button>
-                    
-                </div>
-                <div class="uk-width-1-3 uk-text-center uk-margin">
-                    <li class="book_title"><strong> TITLE:</strong> ${bookObjArr[i].title}</li>
-                    <li class="author"><strong> AUTHOR:</strong> ${bookObjArr[i].author}</li>
-                    <li class="genre"><strong> Genre:</strong> ${bookObjArr[i].genre}</li>
-                    <li class="isbn"><strong> ISBN:</strong> ${bookObjArr[i].isbn}</li>
-                </div>
-                
-                
-                
-                `)
-                }
 
 
-                else {
+                console.log("else statement hit, the next line is the book obj arr \n" + bookObjArr)
 
-                    console.log("else statement hit, the next line is the book obj arr \n" + bookObjArr)
+                console.log("loop started")
+                console.log(bookObjArr[i])
 
-                    console.log("loop started")
-                    console.log(bookObjArr[i])
-
-                    wishListContainer.append(`
+                wishListContainer.append(`
                 
                     <div class="uk-grid uk-flex-center" data-id = "${bookObjArr[i].id}" data-avail="false">
                       <img src="${bookObjArr[i].imgUrl}" alt="imgUrl for ${bookObjArr[i].title}">
                     <div class="uk-flex uk-flex-column uk-margin uk-width-1-4">
-                      <button class="uk-button uk-button-danger AvailableButton" data-id = "${bookObjArr[i].id}" data-avail="false">Marked Unavailable</button>
-                      <button class="uk-button uk-button-primary deleteBtn libDelete" data-id = "${bookObjArr[i].id}" data-delete = "library" data-isbn="${bookObjArr[i].isbn}" >Delete from Library</button>
+                      <button class="uk-button uk-button-primary AvailableButton" data-id = "${bookObjArr[i].id}" data-avail="${bookAvailability}">Recheck Availability</button>
+                      <button class="uk-button uk-button-primary deleteBtn libDelete" data-id = "${bookObjArr[i].id}" data-delete = "wishlist" data-isbn="${bookObjArr[i].isbn}" >Delete from Wishlist</button>
                     </div>
                     <div class="uk-width-1-3 uk-text-center uk-margin">
                       <li class="book_title"><strong> TITLE:</strong> ${bookObjArr[i].title}</li>
@@ -307,7 +251,7 @@ $(document).ready(function () {
                 
                 
                 `)
-                }
+
 
 
 
@@ -320,8 +264,63 @@ $(document).ready(function () {
 
         });// closes get books by id ajax call
 
-    }// closes renderOwnedBooks()
+    }// closes renderWishlist()
 
+
+
+    function renderBorrowed(userInfo) {
+        console.log("called renderWishList")
+        console.log("The data in user info is \n \n \n \n " + JSON.stringify(userInfo))
+        $.ajax("/api/bookByBorrowerId/" + userInfo.id, {
+            type: "GET"
+        }).then(function (data) {
+            console.log("the response from renderBorrowed  is " + JSON.stringify(data))
+
+            let bookObjArr = data
+
+            
+            for (i = 0; i < bookObjArr.length; i++) {
+                let bookAvailability = bookObjArr[i].available
+                let borrowStatus = bookObjArr[i].borrowed
+                
+                console.log("else statement hit, the next line is the book obj arr \n" + JSON.stringify(bookObjArr))
+
+                console.log("loop started")
+                console.log(bookObjArr[i])
+
+                if (borrowStatus === 1) {
+                borrowedContainer.append(`
+
+                    <div class="uk-grid uk-flex-center" data-id = "${bookObjArr[i].id}" data-avail="false">
+                        <img src="${bookObjArr[i].imgUrl}" alt="imgUrl for ${bookObjArr[i].title}">
+                    <div class="uk-flex uk-flex-column uk-margin uk-width-1-4">
+                      <button class="uk-button uk-button-secondary returnButton" data-id = "${bookObjArr[i].id}" data-avail="false">Return Book</button>                     
+                    </div>
+                    <div class="uk-width-1-3 uk-text-center uk-margin">
+                      <li ><strong> TITLE:</strong> ${bookObjArr[i].title}</li>
+                      <li ><strong> AUTHOR:</strong> ${bookObjArr[i].author}</li>
+                      <li ><strong> Genre:</strong> ${bookObjArr[i].genre}</li>
+                      <li ><strong> ISBN:</strong> ${bookObjArr[i].isbn}</li>
+                      
+                    </div>
+                  
+                
+                
+                `)
+                }
+
+
+
+
+
+
+            }// closes for loop
+
+        })// closes ajax call
+
+
+
+    }// closes renderBorrowed
 
     /*2. change availability of their book 
          
@@ -377,6 +376,13 @@ $(document).ready(function () {
 
     } // closes checkAvailability();
 
+    
+    function returnBook(){
+
+
+    }
+    //   /api/returnBook/:id"
+
 
     function markReturned(bookId, borrowedStatus) {
         var testObj = { borrowedStatus: "false" }
@@ -388,7 +394,7 @@ $(document).ready(function () {
         }).then(function (response) {
             console.log("changed bookAvailability state to", response);
             // Reload the page to get the updated list
-            location.reload();
+            // location.reload();
         });
 
     }
@@ -411,6 +417,7 @@ $(document).ready(function () {
             });
         }
 
+        // passes the isbn to the delete api call on the wishlist, then the book where isbn = ISBN and userId = req.user[0].id is deleted
         else {
             $.ajax("/api/" + isbn + "/removeWishlistitem", {
                 type: "DELETE"
@@ -419,13 +426,42 @@ $(document).ready(function () {
                 // Reload the page to get the updated list
                 location.reload();
             });
+
         }
+
+
+        /* else {
+              $.ajax("/api/" + bookId + "/delete", {
+                 type: "DELETE"
+             }).then(function () {
+                 console.log("deleted book", bookId);
+                 // Reload the page to get the updated list
+                 location.reload();
+             });
+ 
+         }*/
     }
 
 
 
-
-
+    /*  Taken from home page to try and apply here as well
+    
+    //Alerts the user that the book isn't available and that it is added to their wishlist
+    function wishListAlert() {
+        let alertEl = $(`<div class="avail-alert">`);
+        alertEl.html("This book is not currently available. It is being added to your wishlist.");
+        $("#searchForm").append(alertEl);
+    
+        //We want the alert to disappear in the event of the user hitting the enter key
+        timeFunction();
+    
+        function timeFunction(){
+            setTimeout(function(){
+                let alertElDel = $(".avail-alert");
+                alertElDel.empty();
+            }, 5000);
+        }
+    }*/
 
 
 
@@ -455,6 +491,25 @@ $(document).ready(function () {
     });// closes change availability button
 
 
+    $(document).on("click", ".recheckBtn", function (event) {
+        event.preventDefault();
+
+        
+        let test = $(this)
+        console.log(test)
+        let bookId = $(this).data("id");
+        let borrowedStatus = $(this).data("avail");
+        //changeBookAvailability(bookId, bookAvailability);
+        console.log("clicked this button")
+        markReturned(bookId, borrowedStatus);
+        location.reload();
+        //renderOwnedBooks();
+
+
+
+    });// closes return button on click
+
+
     $(document).on("click", ".returnButton", function (event) {
         event.preventDefault();
 
@@ -473,7 +528,7 @@ $(document).ready(function () {
         //changeBookAvailability(bookId, bookAvailability);
         console.log("clicked this button")
         markReturned(bookId, borrowedStatus);
-        location.reload();
+         location.reload();
         //renderOwnedBooks();
 
 
@@ -482,7 +537,7 @@ $(document).ready(function () {
 
 
 
-
+    // ON CLICK OF DELETE BUTTON, RUN DELETEBOOK FUNCTION (will delete based on value applied to data-delete)
     $(document).on("click", ".libDelete", function (event) {
         event.preventDefault();
         let bookId = $(this).data("id");
@@ -494,6 +549,8 @@ $(document).ready(function () {
 
 
     });
+
+
 
     /* $("button.AvailableButton").click(function(event){
          let e = event
