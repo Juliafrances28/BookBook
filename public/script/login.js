@@ -2,10 +2,7 @@
 
 $(document).ready(function () {
 
-    function play() {
-        var sound = document.getElementById("mouse-click");
-        sound.play();
-    }
+
 
 
 
@@ -20,8 +17,7 @@ $(document).ready(function () {
 
         $.ajax("/login", {
             type: "POST",
-            data: user,
-            dataType: "json"
+            data: user
         }).then(function (data) {
             window.location.replace("/home")
 
