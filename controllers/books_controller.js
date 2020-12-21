@@ -484,6 +484,18 @@ router.get("/api/WishlistByUserId/:id", function (req, res) {
     })
 });
 
+
+//Gets entry from table from book by borrowedId
+router.get("/api/bookByBorrowerId/:id", function (req, res) {
+    let id = req.params.id;
+    //id = 1
+    books.selectWhere("borrowerId", id, function (data) {
+        // console.log("owned books: " + data )
+        res.json(data);
+    })
+});
+ 
+
 // Export routes for server.js to use.
 module.exports = router;
 
