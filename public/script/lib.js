@@ -9,34 +9,9 @@ $(document).ready(function () {
     const wishListContainer = $("#wishListContainer")
     const borrowedContainer = $("#borrowedContainer")
 
-
-
-    /*
     
-    
-    
-    3. make request to borrow if not available add to wish list
-     - get request to check availability, if not available then post request to add to wish list table
-    
-   
-    
-    5. mark it as returned
-    - post request to update availability and hide the button for returning
-    
-    6. delete book from owned library
-    -  ajax call to delete the book from books where ownerId = [user id]
-    
-    7. delete books from wishlist 
-    -  ajax call to delete the book from wishlist where userId = [user id]
-    
-    */
-
-
-
-    /* 
         
-        1. ajax call for user id - store in a variable for use later - DONE*/
-
+        
     //promisified the ajax call to be able to run requestUserInfo afterwards
     function requestUserInfo() {
 
@@ -72,26 +47,7 @@ $(document).ready(function () {
     })
 
 
-    /*
-    $.ajax('/api/user_data', {
-        type: "GET"
-    }).then(function (response) {
-        console.log(response)
-        
-        console.log(JSON.stringify(userInfo))
-
-       
-
-        //renderOwnedBooks(userInfo);
-
-
-
-
-    }).catch((err) => {
-        console.error(err)
-
-    });// closes user info request
-    */
+    
 
 
 
@@ -238,7 +194,7 @@ $(document).ready(function () {
                     <div class="uk-grid uk-flex-center" data-id = "${bookObjArr[i].id}" data-avail="false">
                       <img src="${bookObjArr[i].imgUrl}" alt="imgUrl for ${bookObjArr[i].title}">
                     <div class="uk-flex uk-flex-column uk-margin uk-width-1-4">
-                      <button class="uk-button uk-button-primary AvailableButton" data-id = "${bookObjArr[i].id}" data-avail="${bookAvailability}">Recheck Availability</button>
+                      
                       <button class="uk-button uk-button-primary deleteBtn libDelete" data-id = "${bookObjArr[i].id}" data-delete = "wishlist" data-isbn="${bookObjArr[i].isbn}" >Delete from Wishlist</button>
                     </div>
                     <div class="uk-width-1-3 uk-text-center uk-margin">
@@ -251,10 +207,6 @@ $(document).ready(function () {
                 
                 
                 `)
-
-
-
-
 
 
             }
@@ -278,23 +230,23 @@ $(document).ready(function () {
 
             let bookObjArr = data
 
-
+            
             for (i = 0; i < bookObjArr.length; i++) {
                 let bookAvailability = bookObjArr[i].available
                 let borrowStatus = bookObjArr[i].borrowed
-
+                
                 console.log("else statement hit, the next line is the book obj arr \n" + JSON.stringify(bookObjArr))
 
                 console.log("loop started")
                 console.log(bookObjArr[i])
 
                 if (borrowStatus === 1) {
-                    borrowedContainer.append(`
+                borrowedContainer.append(`
 
                     <div class="uk-grid uk-flex-center" data-id = "${bookObjArr[i].id}" data-avail="false">
                         <img src="${bookObjArr[i].imgUrl}" alt="imgUrl for ${bookObjArr[i].title}">
                     <div class="uk-flex uk-flex-column uk-margin uk-width-1-4">
-                      <button class="uk-button uk-button-secondary returnButton" data-id = "${bookObjArr[i].id}" data-avail="false">Return Book</button>                     
+                                           
                     </div>
                     <div class="uk-width-1-3 uk-text-center uk-margin">
                       <li ><strong> TITLE:</strong> ${bookObjArr[i].title}</li>
@@ -310,10 +262,6 @@ $(document).ready(function () {
                 }
 
 
-
-
-
-
             }// closes for loop
 
         })// closes ajax call
@@ -322,9 +270,6 @@ $(document).ready(function () {
 
     }// closes renderBorrowed
 
-    /*2. change availability of their book 
-         
-        - this will be a post request to update the bool val available */
 
     function changeBookAvailability(bookId, bookAvailability) {
         console.log("changeBookAvail called")
@@ -376,12 +321,7 @@ $(document).ready(function () {
 
     } // closes checkAvailability();
 
-
-    function returnBook() {
-
-
-    }
-    //   /api/returnBook/:id"
+    
 
 
     function markReturned(bookId, borrowedStatus) {
@@ -400,8 +340,7 @@ $(document).ready(function () {
     }
 
 
-    /* 4. if one of the user's books are borrowed show the email of the person borrowing it
-     -  get request to check if borrowed, if true dynamically add an icon to suggest it's borrowed, if false hide then hide the button for returning */
+    
 
     function deleteBook(bookId, deleteClass, isbn) {
         console.log("deleteBook(); has been called")
@@ -430,38 +369,12 @@ $(document).ready(function () {
         }
 
 
-        /* else {
-              $.ajax("/api/" + bookId + "/delete", {
-                 type: "DELETE"
-             }).then(function () {
-                 console.log("deleted book", bookId);
-                 // Reload the page to get the updated list
-                 location.reload();
-             });
- 
-         }*/
+        
     }
 
 
 
-    /*  Taken from home page to try and apply here as well
     
-    //Alerts the user that the book isn't available and that it is added to their wishlist
-    function wishListAlert() {
-        let alertEl = $(`<div class="avail-alert">`);
-        alertEl.html("This book is not currently available. It is being added to your wishlist.");
-        $("#searchForm").append(alertEl);
-    
-        //We want the alert to disappear in the event of the user hitting the enter key
-        timeFunction();
-    
-        function timeFunction(){
-            setTimeout(function(){
-                let alertElDel = $(".avail-alert");
-                alertElDel.empty();
-            }, 5000);
-        }
-    }*/
 
 
 
@@ -491,36 +404,13 @@ $(document).ready(function () {
     });// closes change availability button
 
 
-    $(document).on("click", ".recheckBtn", function (event) {
-        event.preventDefault();
-
-
-        let test = $(this)
-        console.log(test)
-        let bookId = $(this).data("id");
-        let borrowedStatus = $(this).data("avail");
-        //changeBookAvailability(bookId, bookAvailability);
-        console.log("clicked this button")
-        markReturned(bookId, borrowedStatus);
-        location.reload();
-        //renderOwnedBooks();
-
-
-
-    });// closes return button on click
+  k
 
 
     $(document).on("click", ".returnButton", function (event) {
         event.preventDefault();
 
-        /*let availBtn = event.target
-        let imgel = $(availBtn).parent().parent()
-        let bookel = imgel[0]
-        let bookId = $(bookel).attr("data-id")
-        let bookAvailability = $(bookel).attr("data-avail")
-        console.log(bookId)
-        console.log(bookAvailability)*/
-        //console.log($(bookel).attr("data-id"))
+       
         let test = $(this)
         console.log(test)
         let bookId = $(this).data("id");
@@ -528,7 +418,7 @@ $(document).ready(function () {
         //changeBookAvailability(bookId, bookAvailability);
         console.log("clicked this button")
         markReturned(bookId, borrowedStatus);
-        location.reload();
+         location.reload();
         //renderOwnedBooks();
 
 
@@ -552,27 +442,19 @@ $(document).ready(function () {
 
 
 
-    /* $("button.AvailableButton").click(function(event){
-         let e = event
-         let c = $(e).children().children();
-         console.log("clicked")
- 
- 
- 
-     });*/
+  
 
-    $(".target").on("click", function (event) {
+
+
+
+
+     $(".target").on("click", function (event) {
         $.ajax("/logout", {
             type: "GET"
         }).then(function () {
             window.location.replace("/login")
         })
     })
-
-
-
-
-
 
 
 
