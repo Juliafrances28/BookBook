@@ -118,36 +118,6 @@ router.put("/api/bookAvailable/:bookId", function (req, res) {
 });
 
 
-//User can mark a book as borrowed
-router.put("/api/borrow/:bookId", function (req, res) {
-    //change availability from true to false
-    //change checkedout from false to true
-
-    let condition = "id = " + req.params.bookId;
-
-    books.updateOne({
-        available: false
-    }, condition, function (result) {
-        if (result.changedRows == 0) {
-            return res.status(404).end();
-        } else {
-            changeSecondOne();
-        }
-    });
-
-    function changeSecondOne() {
-        books.updateOne({
-            checkedOut: true
-        }, condition, function (result) {
-            if (result.changedRows == 0) {
-                return res.status(404).end();
-            } else {
-                changeSecondOne();
-                res.json({ id: req.params.id });
-            }
-        });
-    }
-});
 
 //Can mark a book as returned
 router.put("/api/:bookId/return", function (req, res) {
@@ -245,7 +215,9 @@ router.put("/borrow/:isbn", function (req, res) {
     //We want to set borrowed=true for ONE entry where available=true AND borrowed=false
     let isbn2 = req.params.isbn;
 
-    let condition1 = "isbn =" + isbn2;
+    isbn2 = isbn2.replace(/:/g,'');
+    
+    let condition1 = `isbn = + ${isbn2}`;
     let condition2 = "available=true";
     let condition3 = "borrowed=false";
     books.updateOneLimit({
@@ -272,10 +244,7 @@ router.get("/books/available/:ownerId", function (req, res) {
         res.json(data);
     });
 
-    // books.selectWhereTwo("id", id, "borrowed", "true", function (data) {
-    //     console.log("data is " + data)
-    //     res.json(data);
-    // })
+
 
 })
 
@@ -324,9 +293,6 @@ router.get("/api/user_data", function (req, res) {
         })
         console.log("sent Json with User info")
 
-        // })
-        // res.json({ user });
-        //console.log("sent Json with User info")
     }//Ends else statement
 
 })
@@ -433,8 +399,7 @@ router.put("/api/returnBook/:id", function (req, res) {
     console.log(JSON.stringify(req.body))
 
     let condition = "id=" + id;
-    //let condition2 = "available = false";
-    //let condition3 = "borrowed = true";
+
 
     //First set available equal to true
     books.updateOne({
