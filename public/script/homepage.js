@@ -32,6 +32,7 @@ $(function () {
             event.preventDefault();
 
             let isbn = $(this).data("isbn13");
+            isbn = isbn.replace(/\D/g,'');
 
             $.get(`/gbooks/${isbn}`, function (data) {
                 let item = data.items[0].volumeInfo;
