@@ -77,7 +77,6 @@ $(function () {
 
 
             let newAvailability = {
-                available: false,
                 borrowed: true
             }
 
@@ -143,7 +142,7 @@ $(function () {
             //We want to mark it as borrowed by the user
 
             let newAvailability = {
-                available: false, 
+                available: false,
                 borrowed: true
             }
 
@@ -226,8 +225,8 @@ $(function () {
             //We want the alert to disappear in the event of the user hitting the enter key
             timeFunction();
 
-            function timeFunction(){
-                setTimeout(function(){
+            function timeFunction() {
+                setTimeout(function () {
                     let alertElDel = $(".avail-alert");
                     alertElDel.empty();
                 }, 5000);
@@ -279,10 +278,7 @@ $(function () {
         })
     })
 
-    function play() {
-        var sound = document.getElementById("button-click");
-        sound.play();
-    }
+
 
 
 
