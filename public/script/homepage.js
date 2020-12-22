@@ -77,7 +77,6 @@ $(function () {
 
 
             let newAvailability = {
-                available: false,
                 borrowed: true
             }
 
