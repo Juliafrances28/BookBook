@@ -278,18 +278,18 @@ $(document).ready(function () {
 
             let bookObjArr = data
 
-            
+
             for (i = 0; i < bookObjArr.length; i++) {
                 let bookAvailability = bookObjArr[i].available
                 let borrowStatus = bookObjArr[i].borrowed
-                
+
                 console.log("else statement hit, the next line is the book obj arr \n" + JSON.stringify(bookObjArr))
 
                 console.log("loop started")
                 console.log(bookObjArr[i])
 
                 if (borrowStatus === 1) {
-                borrowedContainer.append(`
+                    borrowedContainer.append(`
 
                     <div class="uk-grid uk-flex-center" data-id = "${bookObjArr[i].id}" data-avail="false">
                         <img src="${bookObjArr[i].imgUrl}" alt="imgUrl for ${bookObjArr[i].title}">
@@ -376,8 +376,8 @@ $(document).ready(function () {
 
     } // closes checkAvailability();
 
-    
-    function returnBook(){
+
+    function returnBook() {
 
 
     }
@@ -494,7 +494,7 @@ $(document).ready(function () {
     $(document).on("click", ".recheckBtn", function (event) {
         event.preventDefault();
 
-        
+
         let test = $(this)
         console.log(test)
         let bookId = $(this).data("id");
@@ -528,7 +528,7 @@ $(document).ready(function () {
         //changeBookAvailability(bookId, bookAvailability);
         console.log("clicked this button")
         markReturned(bookId, borrowedStatus);
-         location.reload();
+        location.reload();
         //renderOwnedBooks();
 
 
@@ -561,6 +561,13 @@ $(document).ready(function () {
  
      });*/
 
+    $(".target").on("click", function (event) {
+        $.ajax("/logout", {
+            type: "GET"
+        }).then(function () {
+            window.location.replace("/login")
+        })
+    })
 
 
 
