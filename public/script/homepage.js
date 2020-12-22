@@ -32,9 +32,28 @@ $(function () {
             event.preventDefault();
 
             let isbn = $(this).data("isbn13");
-            isbn = isbn.replace(/\D/g,'');
+            let bookTitle = $(this).data("booktitle");
+
 
             $.get(`/gbooks/${isbn}`, function (data) {
+                let totalItems = data.totalItems;
+                if(totalItems ==0){
+                    //This particular copy won't work with the database so the user needs to select a different item
+                    let alertEl = $(`<div class="avail-alert">`);
+                    alertEl.html("This version of this book is incompatible with our database. Please select a different version or a different book.");
+                    $("#searchForm").append(alertEl);
+        
+                    //We want the alert to disappear in the event of the user hitting the enter key
+                    timeFunction();
+        
+                    function timeFunction() {
+                        setTimeout(function () {
+                            let alertElDel = $(".avail-alert");
+                            alertElDel.empty();
+                        }, 5000);
+                    }
+                }
+                else{
                 let item = data.items[0].volumeInfo;
                 let title = item.title;
                 let author = item.authors[0];
@@ -63,7 +82,7 @@ $(function () {
                 }).then(function () {
                     location.reload();
                 });
-
+            }//This ends the else statement
             });
 
         });
@@ -258,8 +277,8 @@ $(function () {
                     isbn_13 = item.industryIdentifiers[0].identifier;
                     $(imageEl[i]).html(`<a><img src  = "${normImage}" alt = "book-result ${bookTitle}"></a>`);
                     let btnsEl = $("<div>");
-                    $(btnsEl).html(`<button type=button class="btn btn-primary addToLibrary" data-isbn13="${isbn_13}">Add to library</button>
-            <button type=button class="btn btn-primary requestToBorrow" data-isbn13="${isbn_13}" onclick="play()">Request to borrow</button>`);
+                    $(btnsEl).html(`<button type=button class="btn btn-primary addToLibrary" data-isbn13="${isbn_13}"  data-booktitle="${bookTitle}">Add to library</button>
+            <button type=button class="btn btn-primary requestToBorrow" data-isbn13="${isbn_13}" data-booktitle="${bookTitle}" onclick="play()">Request to borrow</button>`);
                     $(imageEl[i]).append(btnsEl);
 
                 }
