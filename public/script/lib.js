@@ -404,7 +404,7 @@ $(document).ready(function () {
     });// closes change availability button
 
 
-  k
+  
 
 
     $(document).on("click", ".returnButton", function (event) {
