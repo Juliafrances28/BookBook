@@ -13,7 +13,7 @@
 
 ## Installation 
 Initially we ran a npm install and made sure all team members added the .env file to local drive.  
-The front-end team applied the Ulkit framework to html and css. We also used avascript to search for books. 
+The front-end team applied the Ulkit framework to html and css. We also used javascript to search for books. 
 
 The back-end team used the Google Books API and npm package. This allowed the team to make a back-end version of the Google Books API.  dotenv was used to enable environmental variables in order to protect the API key. They also used two languages, javascript and jquery, to get things running on the back-end. MySQL was used to handle the books’ data. 
 
